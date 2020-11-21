@@ -4,34 +4,58 @@
     ViewBag.Title = "Show";
 }
 <br />
-<a href="/Posts/Index">Inapoi la articole</a>
+<a href="/Posts/Index">Back to Posts</a>
 <br />
-<a class="btn btn-info" href="/Posts/New">Adauga articol</a>
+<a class="btn btn-info" href="/Posts/New">Add post</a>
 <br />
 <div class="panel panel-default">
 
     @Html.Partial("PostInfo", Model)
-    @if (ViewBag.afisareButoane)
+    @if (ViewBag.CurrentUser.Item2)
     {
         <div class="panel-footer">
 
-            <a class="btn btn-success pull-left" href="/Posts/Edit/@Model.PostId">Modifica Post</a>
+            <a class="btn btn-success pull-left" href="/Posts/Edit/@Model.PostId">Edit post</a>
             @using (Html.BeginForm(actionName: "Delete", controllerName: "Posts", method: FormMethod.Post, routeValues: new { id = Model.PostId }))
             {
                 @Html.HttpMethodOverride(HttpVerbs.Delete)
-                <button class="btn btn-danger pull-right" type="submit">Sterge articol</button>
+                <button class="btn btn-danger pull-right" type="submit">Delete post</button>
             }
-            
-
 
             <div class="clearfix"></div>
         </div>
     }
-    </div>
+</div>
 
-
+<!--This is the comments section-->
 <br />
+@foreach (var comm in Model.Comments)
+{
+    @Html.Partial("CommentInfo", comm);
+}
 
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-8">
+            <div class="panel">
+                <form method="post" action="/Comments/New">
+                    <div class="panel-body">
+                        <input type="hidden" name="PostId" value="@Model.PostId" />
+                        <label>Enter your comment</label>
+                        <br />
+                        <textarea class="form-control" name="Content"></textarea>
+                        <br />
+                        <button class="btn btn-success " type="submit">Add comment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
 
 
 

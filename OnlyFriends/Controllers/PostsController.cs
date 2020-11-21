@@ -32,8 +32,7 @@ namespace OnlyFriends.Controllers
         public ActionResult Show(int id)
         {
             Post post = db.Posts.Find(id);
-
-            ViewBag.afisareButoane = (post.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
+            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), post.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
 
             return View(post);
 
@@ -75,18 +74,19 @@ namespace OnlyFriends.Controllers
                 return View(post);
             }
         }
+
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Edit(int id)
         {
             
             Post post= db.Posts.Find(id);
-            if(post.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"))
+            if (post.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"))
             {
                 return View(post);
             }
             else
             {
-                TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui articol care nu va apartine!";
+                TempData["message"] = "You don't have enough permissions to modify this article!";
                 return RedirectToAction("Index");
             }
             
@@ -109,7 +109,7 @@ namespace OnlyFriends.Controllers
                             post.Title = requestPost.Title;
                             post.Content = requestPost.Content;
                             db.SaveChanges();
-                            TempData["message"] = "Articolul a fost modificat!";
+                            TempData["message"] = "The post has been successfully changed!";
                             return RedirectToAction("Index");
                         }
 
@@ -117,7 +117,7 @@ namespace OnlyFriends.Controllers
                     }
                     else
                     {
-                        TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui articol care nu va apartine!";
+                        TempData["message"] = "You don't have enough permissions to modify this article!";
                         return RedirectToAction("Index");
                     }
                 }
@@ -143,12 +143,12 @@ namespace OnlyFriends.Controllers
             {
                 db.Posts.Remove(post);
                 db.SaveChanges();
-                TempData["message"] = "Articolul a fost sters!";
+                TempData["message"] = "The post was deleted";
                 return RedirectToAction("Index");
             }
             else
             {
-                TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui articol care nu va apartine!";
+                TempData["message"] = "You don't have enough permissions to modify this article!";
                 return RedirectToAction("Index");
             }
 

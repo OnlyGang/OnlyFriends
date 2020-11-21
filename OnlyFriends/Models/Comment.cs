@@ -13,8 +13,12 @@ namespace OnlyFriends.Models
         [Required]
         public string Content { get; set; }
         public DateTime Date { get; set; }
-        public int ArticleId { get; set; }
+        [Required]
+        public int PostId { get; set; }
+        [Required]
+        public string UserId { get; set; }
+        public int LikesCount { get; set; }
 
-        public virtual Article Article { get; set; }
+        public virtual Post Post { get; set; }
     }
 }

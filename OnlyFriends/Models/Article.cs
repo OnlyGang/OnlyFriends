@@ -27,7 +27,6 @@ namespace OnlyFriends.Models
         public int CategoryId { get; set; }
 
         public virtual Category Category { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
 
         public IEnumerable<SelectListItem> Categ { get; set; }
     }
