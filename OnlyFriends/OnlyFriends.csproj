@@ -259,6 +259,7 @@
     <Content Include="Views\Shared\PostInfo.cshtml" />
     <Content Include="Views\Posts\New.cshtml" />
     <Content Include="Views\Posts\Show.cshtml" />
+    <Content Include="Views\Posts\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
