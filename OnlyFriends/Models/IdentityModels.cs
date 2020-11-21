@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -16,6 +17,8 @@ namespace OnlyFriends.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        public virtual ICollection<PostsLikedBy> PostsLiked { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -23,7 +26,15 @@ namespace OnlyFriends.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext, OnlyFriends.Migrations.Configuration>("DefaultConnection"));
+
         }
+        public DbSet<Article> Articles { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<PostsLikedBy> PostLikes { get; set; }
+
 
         public static ApplicationDbContext Create()
         {

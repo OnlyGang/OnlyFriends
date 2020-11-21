@@ -1,0 +1,31 @@
+﻿@model OnlyFriends.Models.Article
+
+@{
+    ViewBag.Title = "Show";
+}
+<br />
+<a href="/Posts/Index">Inapoi la articole</a>
+<br />
+<a class="btn btn-info" href="/Posts/New">Adauga articol</a>
+<br />
+<div class="panel panel-default">
+
+    @Html.Partial("PostInfo", Model)
+
+    <div class="panel-footer">
+
+
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+
+<br />
+
+
+
+
+
+
+
+

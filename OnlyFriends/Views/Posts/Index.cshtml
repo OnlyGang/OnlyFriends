@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<h1>@ViewBag.Message</h1>
+<h2>News</h2>
+
+
+<a class="btn btn-primary" href="/Posts/New">Adauga articol</a>
+<br />
+
+@foreach (OnlyFriends.Models.Post post in ViewBag.Posts)
+{
+    <div class="panel panel-default">
+
+        @Html.Partial("PostInfo", post)
+
+        <div class="panel-footer">
+            <a class=" btn btn-sm btn btn-success" href="/Posts/Show/@post.PostId">Afisare post</a>
+        </div>
+
+    </div>
+}
+
+
+
+
+
