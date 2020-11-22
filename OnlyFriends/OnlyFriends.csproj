@@ -168,8 +168,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\ArticlesController.cs" />
-    <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\CommentLikesController.cs" />
     <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -189,8 +187,6 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Article.cs" />
-    <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\CommentLike.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -256,16 +252,7 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Articles\Edit.cshtml" />
-    <Content Include="Views\Articles\Index.cshtml" />
-    <Content Include="Views\Articles\New.cshtml" />
-    <Content Include="Views\Articles\Show.cshtml" />
-    <Content Include="Views\Categories\Edit.cshtml" />
-    <Content Include="Views\Categories\Index.cshtml" />
-    <Content Include="Views\Categories\New.cshtml" />
-    <Content Include="Views\Categories\Show.cshtml" />
     <Content Include="Views\Comments\Edit.cshtml" />
-    <Content Include="Views\Shared\ArticleInfo.cshtml" />
     <Content Include="Views\Posts\Index.cshtml" />
     <Content Include="Views\Shared\PostInfo.cshtml" />
     <Content Include="Views\Posts\New.cshtml" />

@@ -22,5 +22,5 @@
     <br />
 
     <button class="btn btn-success block" type="submit">Add post</button>
-    @Html.ActionLink("Back to posts", "Index", "Posts", new { @class = "btn btn-warning block" })
+    @Html.ActionLink("Back to posts", "Index", new { controller = "Posts" }, new { @class = "btn btn-warning block" })
 }
