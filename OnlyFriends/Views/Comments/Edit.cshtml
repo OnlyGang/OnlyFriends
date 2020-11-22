@@ -3,23 +3,17 @@
     ViewBag.Title = "Edit";
 }
 
+<h1>@TempData["message"]</h1>
 <h2>Edit comment</h2>
 @using (Html.BeginForm(actionName: "Edit", controllerName: "Comments", method: FormMethod.Post))
 {
+    @Html.ValidationSummary();
     @Html.HttpMethodOverride(HttpVerbs.Put)
-    @Html.Label("Content:")
+    @Html.Label("Content", "Content:")
     <br />
     @Html.TextArea("Content", Model.Content)
     <br />
+    @Html.HiddenFor(m => m.Date)
     <button class="btn btn-success" type="submit">Edit</button>
 }
-
-@*<form method="post" action="/Comments/Edit/@ViewBag.Comment.CommentId">
-    @Html.HttpMethodOverride(HttpVerbs.Put)
-    <label>Content:</label>
-    <br />
-    <textarea name="Content">@ViewBag.Comment.Content</textarea>
-    <br />
-    <button class="btn btn-success" type="submit">Edit</button>
-</form>*@
 

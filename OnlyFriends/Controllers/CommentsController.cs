@@ -81,6 +81,7 @@ namespace OnlyFriends.Controllers
                             db.SaveChanges();
                             return Redirect("/Posts/Show/" + comm.PostId);
                         }
+                        TempData["message"] = "1";
                         return View(requestComment);
                     }
                     else
@@ -91,11 +92,13 @@ namespace OnlyFriends.Controllers
                 }
                 else
                 {
+                    TempData["message"] = "2";
                     return View(requestComment);
                 }
             }
             catch (Exception e)
             {
+                TempData["message"] = "3";
                 return View(requestComment);
             }
         }

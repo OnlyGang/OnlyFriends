@@ -16,11 +16,11 @@ namespace OnlyFriends.Models
         [Required]
         public string Content { get; set; }
         public DateTime Date { get; set; }
-        [Required]
         public string UserId { get; set; }
         public int LikeCount { get; set; }
 
         public virtual Post Post { get; set; }
+        public virtual ApplicationUser User { get; set; }
         public virtual ICollection<CommentLike> CommentLikes { get; set; }
     }
 }
