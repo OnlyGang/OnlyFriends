@@ -38,7 +38,7 @@ namespace OnlyFriends.Controllers
                                     where pl.PostId == id
                                     select pl.User.Email;
 
-            ViewBag.IsLikedByCurrentUser = (db.PostLikes.Find(id, User.Identity.GetUserId()) == null);
+            ViewBag.IsLikedByCurrentUser = (db.PostLikes.Find(id, User.Identity.GetUserId()) != null);
 
             return View(post);
 

@@ -27,13 +27,23 @@
     }
 
     @*Likes*@
-    
-    <form method="post" action="/PostLikes/New">
-        <input type="hidden" name="PostId" value="@Model.PostId" />
-        <input type="hidden" name="UserId" value="@ViewBag.CurrentUser.Item1" />
-        <button type="submit"> <span class='glyphicon glyphicon-thumbs-up'></span> like </button>
-    </form>
-    
+    @if (!ViewBag.IsLikedByCurrentUser)
+    {
+        <form method="post" action="/PostLikes/New">
+            <input type="hidden" name="PostId" value="@Model.PostId" />
+            <input type="hidden" name="UserId" value="@ViewBag.CurrentUser.Item1" />
+            <button type="submit"> <span class='glyphicon glyphicon-thumbs-up'></span> like </button>
+        </form>
+    }
+    else
+    {
+        <form method="post" action="/PostLikes/Delete">
+            @Html.HttpMethodOverride(HttpVerbs.Delete)
+            <input type="hidden" name="PostId" value="@Model.PostId" />
+            <input type="hidden" name="UserId" value="@ViewBag.CurrentUser.Item1" />
+            <button type="submit" style="color: blue"> <span class='glyphicon glyphicon-thumbs-up'></span> like </button>
+        </form>
+    }
     <span>@Model.LikeCount</span>
     @foreach (var em in ViewBag.UsersWhoLiked)
     {

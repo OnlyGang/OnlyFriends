@@ -41,8 +41,9 @@ namespace OnlyFriends.Controllers
         [Authorize(Roles = "User,Editor,Admin")]
         [HttpDelete]
         public ActionResult Delete(PostLike postlike)
-        { 
-            db.PostLikes.Remove(postlike);
+        {
+            PostLike ToDelete = db.PostLikes.Find(postlike.PostId, postlike.UserId);
+            db.PostLikes.Remove(ToDelete);
             db.Posts.Find(postlike.PostId).LikeCount--;
             db.SaveChanges();
             return Redirect("/Posts/Show/" + postlike.PostId);
