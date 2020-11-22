@@ -33,7 +33,7 @@ namespace OnlyFriends.Controllers
         {
             Post post = db.Posts.Find(id);
             ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), post.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
-
+            
             return View(post);
 
         }

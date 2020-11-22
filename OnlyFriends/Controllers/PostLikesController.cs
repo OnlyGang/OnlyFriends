@@ -1,24 +1,27 @@
-﻿using OnlyFriends.Models;
-using System;
+﻿using System;
+using OnlyFriends.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using AppContext = OnlyFriends.Models.ApplicationDbContext;
 using Microsoft.AspNet.Identity;
 
 namespace OnlyFriends.Controllers
 {
-
-    public class PostLikes : Controller
+    
+    public class PostLikesController : Controller
     {
-        private AppContext db = new OnlyFriends.Models.ApplicationDbContext();
-        // GET: PostsLikedB
-        [Authorize(Roles = "User,Editor,Admin")]
-        [HttpPost]
-        public ActionResult AddLike(PostLike postlike) 
+        private ApplicationDbContext db = new ApplicationDbContext();
+        // GET: PostLikes
+        public ActionResult Index()
         {
+            return View();
+        }
 
+        [HttpPost]
+        [Authorize(Roles = "User,Editor,Admin")]
+        public ActionResult New(PostLike postlike)
+        {
             try
             {
                 db.PostLikes.Add(postlike);
@@ -30,6 +33,7 @@ namespace OnlyFriends.Controllers
             {
                 return Redirect("/Posts/Show/" + postlike.PostId);
             }
+
         }
     }
 }

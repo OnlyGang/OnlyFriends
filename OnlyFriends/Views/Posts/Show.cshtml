@@ -15,7 +15,7 @@
     {
     <div class="panel-footer">
         
-        <form method="post" action="/PostLikes/AddLike">
+        <form method="post" action="/PostLikes/New">
             <input type="hidden" name="PostId" value="@Model.PostId" />
             <input type="hidden" name="UserId" value="@ViewBag.CurrentUser.Item1" />
             <button type="submit" > <span class='glyphicon glyphicon-thumbs-up'></span> like </button> 
