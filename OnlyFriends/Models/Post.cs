@@ -22,7 +22,7 @@ namespace OnlyFriends.Models
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
-        public virtual ICollection<PostsLikedBy> UsersWhoLike { get; set; }
+        public virtual ICollection<PostLike> PostLikes { get; set; }
     }
 
 

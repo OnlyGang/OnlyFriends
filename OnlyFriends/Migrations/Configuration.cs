@@ -10,8 +10,6 @@ namespace OnlyFriends.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
-            AutomaticMigrationDataLossAllowed = true;
-            ContextKey = "OnlyFriends.Models.ApplicationDbContext";
         }
 
         protected override void Seed(OnlyFriends.Models.ApplicationDbContext context)
