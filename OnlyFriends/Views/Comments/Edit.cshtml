@@ -1,15 +1,25 @@
-﻿
+﻿@model OnlyFriends.Models.Comment
 @{
     ViewBag.Title = "Edit";
 }
 
 <h2>Edit comment</h2>
-<form method="post" action="/Comments/Edit/@ViewBag.Comment.CommentId">
+@using (Html.BeginForm(actionName: "Edit", controllerName: "Comments", method: FormMethod.Post))
+{
+    @Html.HttpMethodOverride(HttpVerbs.Put)
+    @Html.Label("Content:")
+    <br />
+    @Html.TextArea("Content", Model.Content)
+    <br />
+    <button class="btn btn-success" type="submit">Edit</button>
+}
+
+@*<form method="post" action="/Comments/Edit/@ViewBag.Comment.CommentId">
     @Html.HttpMethodOverride(HttpVerbs.Put)
     <label>Content:</label>
     <br />
     <textarea name="Content">@ViewBag.Comment.Content</textarea>
     <br />
     <button class="btn btn-success" type="submit">Edit</button>
-</form>
+</form>*@
 

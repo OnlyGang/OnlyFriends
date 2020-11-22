@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -11,14 +12,15 @@ namespace OnlyFriends.Models
         [Key]
         public int CommentId { get; set; }
         [Required]
+        public int PostId { get; set; }
+        [Required]
         public string Content { get; set; }
         public DateTime Date { get; set; }
         [Required]
-        public int PostId { get; set; }
-        [Required]
         public string UserId { get; set; }
-        public int LikesCount { get; set; }
+        public int LikeCount { get; set; }
 
         public virtual Post Post { get; set; }
+        public virtual ICollection<CommentLike> CommentLikes { get; set; }
     }
 }

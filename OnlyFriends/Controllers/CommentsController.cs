@@ -52,8 +52,15 @@ namespace OnlyFriends.Controllers
         public ActionResult Edit(int id)
         {
             Comment comm = db.Comments.Find(id);
-            ViewBag.Comment = comm;
-            return View();
+            if (comm.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"))
+            {
+                return View(comm);
+            }
+            else
+            {
+                TempData["message"] = "You don't have enough permissions to modify this article!";
+                return Redirect("/Posts/Show/" + comm.PostId);
+            }
         }
 
         [HttpPut]
@@ -62,19 +69,35 @@ namespace OnlyFriends.Controllers
         {
             try
             {
-                Comment comm = db.Comments.Find(id);
-                if (TryUpdateModel(comm))
+                if (ModelState.IsValid)
                 {
-                    comm.Content = requestComment.Content;
-                    db.SaveChanges();
+                    Comment comm = db.Comments.Find(id);
+                    if (comm.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"))
+                    {
+                        if (TryUpdateModel(comm))
+                        {
+                            comm.Content = requestComment.Content;
+                            TempData["message"] = "The comment has been successfully changed!";
+                            db.SaveChanges();
+                            return Redirect("/Posts/Show/" + comm.PostId);
+                        }
+                        return View(requestComment);
+                    }
+                    else
+                    {
+                        TempData["message"] = "You don't have enough permissions to modify this comment!";
+                        return RedirectToAction("Index");
+                    }
                 }
-                return Redirect("/Posts/Show/" + comm.PostId);
+                else
+                {
+                    return View(requestComment);
+                }
             }
             catch (Exception e)
             {
-                return View();
+                return View(requestComment);
             }
-
         }
             
           

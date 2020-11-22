@@ -46,10 +46,17 @@
             <span>@Model.LikeCount</span>
         }
     }
-    @*@foreach (var em in ViewBag.UsersWhoLiked)
+
+    @if (Model.LikeCount > 0) 
+    { 
+    <div>
+        <span style="display: inline-block; font-weight: bold; font-size: 90%">Liked By:</span>
+        @foreach (var pl in Model.PostLikes)
         {
-          <span>@em</span>
-        }*@
+            <span style="display: inline-block; font-size: 90%">@pl.User.Email</span>
+        }
+    </div>
+    }
 </div>
 
 <!--This is the comments section-->

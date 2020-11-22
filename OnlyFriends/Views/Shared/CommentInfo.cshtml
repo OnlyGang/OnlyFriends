@@ -1,4 +1,14 @@
 ﻿<div class="container">
+    <!--Check if the comment is liked by the current user-->
+    @{ bool IsLikedByCurrentUser = false; }
+    @foreach (var cl in Model.CommentLikes)
+    {
+        if (cl.UserId == ViewBag.CurrentUser.Item1) 
+        { 
+            IsLikedByCurrentUser = true;
+            break;
+        }
+    }
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
@@ -6,9 +16,29 @@
                 <p>@Model.Content</p>
                 <small class="pull-right">@Model.Date</small>
             </div>
+            <!--Like button-->
             <div style="display: inline-block; float: left; margin-right: 15px">
-                <span class="glyphicon glyphicon-thumbs-up"></span>
+                @if (!IsLikedByCurrentUser)
+                {
+                    using (Html.BeginForm(actionName: "New", controllerName: "CommentLikes", method: FormMethod.Post))
+                    {
+                        @Html.Hidden("CommentId", (int)Model.CommentId)
+                        @Html.Hidden("UserId", (string)ViewBag.CurrentUser.Item1)
+                        <button type="submit" class="glyphicon glyphicon-thumbs-up" style="border: none; background: transparent"></button>
+                        <span>@Model.LikeCount</span>
+                    }
+                }
+                else
+                {
+                    using (Html.BeginForm(actionName: "Delete", controllerName: "CommentLikes", method: FormMethod.Post, routeValues: new { CommentId = Model.CommentId, UserId = (string)ViewBag.CurrentUser.Item1 }))
+                    {
+                        @Html.HttpMethodOverride(HttpVerbs.Delete)
+                        <button type="submit" class="glyphicon glyphicon-thumbs-up" style="color: blue; border: none; background: transparent"></button>
+                        <span>@Model.LikeCount</span>
+                    }
+                }
             </div>
+            <!--Delete/Edit Buttons (requires permission)-->
             @if (ViewBag.CurrentUser.Item2 || ViewBag.CurrentUser.Item1 == Model.UserId)
             {
                 <div style="display: inline-block; float : left; margin-right: 15px">
@@ -19,6 +49,18 @@
                         @Html.HttpMethodOverride(HttpVerbs.Delete)
                         <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
                     </form>
+                </div>
+            }
+            <!--Like count-->
+            @if (Model.LikeCount > 0)
+            {
+                <br />
+                <div>
+                    <span style="display: inline-block; font-weight: bold; font-size: 80%">Liked By:</span>
+                    @foreach (var cl in Model.CommentLikes)
+                    {
+                        <span style="display: inline-block; font-size: 80%">@cl.User.Email</span>
+                    }
                 </div>
             }
         </div>

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using AppContext = OnlyFriends.Models.ApplicationDbContext;
 using Microsoft.AspNet.Identity;
 using System.Data.Entity;
 
@@ -13,7 +12,8 @@ namespace OnlyFriends.Controllers
 
     public class PostsController : Controller
     {
-        private AppContext db = new OnlyFriends.Models.ApplicationDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         // GET: Post
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Index()
@@ -34,12 +34,7 @@ namespace OnlyFriends.Controllers
         {
             Post post = db.Posts.Find(id);
             ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), post.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
-            ViewBag.UsersWhoLiked = from pl in db.PostLikes.Include("User")
-                                    where pl.PostId == id
-                                    select pl.User.Email;
-
             ViewBag.IsLikedByCurrentUser = (db.PostLikes.Find(id, User.Identity.GetUserId()) != null);
-
             return View(post);
 
         }
@@ -86,24 +81,22 @@ namespace OnlyFriends.Controllers
         public ActionResult Edit(int id)
         {
             
-            Post post= db.Posts.Find(id);
+            Post post = db.Posts.Find(id);
             if (post.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"))
             {
                 return View(post);
             }
             else
             {
-                TempData["message"] = "You don't have enough permissions to modify this article!";
+                TempData["message"] = "You don't have enough permissions to modify this post!";
                 return RedirectToAction("Index");
             }
-            
         }
 
         [HttpPut]
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Edit(int id, Post requestPost)
         {
-
             try
             {
                 if (ModelState.IsValid)
@@ -117,14 +110,14 @@ namespace OnlyFriends.Controllers
                             post.Content = requestPost.Content;
                             db.SaveChanges();
                             TempData["message"] = "The post has been successfully changed!";
-                            return RedirectToAction("Index");
+                            return RedirectToAction("Show/" + id);
                         }
 
                         return View(requestPost);
                     }
                     else
                     {
-                        TempData["message"] = "You don't have enough permissions to modify this article!";
+                        TempData["message"] = "You don't have enough permissions to modify this post!";
                         return RedirectToAction("Index");
                     }
                 }
@@ -132,8 +125,6 @@ namespace OnlyFriends.Controllers
                 {
                     return View(requestPost);
                 }
-
-
             }
             catch (Exception e)
             {
@@ -155,7 +146,7 @@ namespace OnlyFriends.Controllers
             }
             else
             {
-                TempData["message"] = "You don't have enough permissions to modify this article!";
+                TempData["message"] = "You don't have enough permissions to modify this post!";
                 return RedirectToAction("Index");
             }
 
