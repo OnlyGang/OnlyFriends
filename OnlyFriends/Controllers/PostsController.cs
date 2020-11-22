@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using AppContext = OnlyFriends.Models.ApplicationDbContext;
 using Microsoft.AspNet.Identity;
+using System.Data.Entity;
 
 namespace OnlyFriends.Controllers
 {
@@ -33,10 +34,16 @@ namespace OnlyFriends.Controllers
         {
             Post post = db.Posts.Find(id);
             ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), post.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
-            
+            ViewBag.UsersWhoLiked = from pl in db.PostLikes.Include("User")
+                                    where pl.PostId == id
+                                    select pl.User.Email;
+
+            ViewBag.IsLikedByCurrentUser = (db.PostLikes.Find(id, User.Identity.GetUserId()) == null);
+
             return View(post);
 
         }
+
 
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult New()

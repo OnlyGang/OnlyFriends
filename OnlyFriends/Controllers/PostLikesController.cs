@@ -25,6 +25,8 @@ namespace OnlyFriends.Controllers
             try
             {
                 db.PostLikes.Add(postlike);
+                
+                db.Posts.Find(postlike.PostId).LikeCount++;
                 db.SaveChanges();
                 return Redirect("/Posts/Show/" + postlike.PostId);
             }
@@ -34,6 +36,16 @@ namespace OnlyFriends.Controllers
                 return Redirect("/Posts/Show/" + postlike.PostId);
             }
 
+        }
+
+        [Authorize(Roles = "User,Editor,Admin")]
+        [HttpDelete]
+        public ActionResult Delete(PostLike postlike)
+        { 
+            db.PostLikes.Remove(postlike);
+            db.Posts.Find(postlike.PostId).LikeCount--;
+            db.SaveChanges();
+            return Redirect("/Posts/Show/" + postlike.PostId);
         }
     }
 }

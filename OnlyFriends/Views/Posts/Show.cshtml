@@ -13,31 +13,39 @@
     @Html.Partial("PostInfo", Model)
     @if (ViewBag.CurrentUser.Item2)
     {
-    <div class="panel-footer">
-        
-        <form method="post" action="/PostLikes/New">
-            <input type="hidden" name="PostId" value="@Model.PostId" />
-            <input type="hidden" name="UserId" value="@ViewBag.CurrentUser.Item1" />
-            <button type="submit" > <span class='glyphicon glyphicon-thumbs-up'></span> like </button> 
-        </form>
-        
+        <div class="panel-footer">
 
-        @Html.ActionLink("<span class='glyphicon glyphicon-thumbs-up'></span> notlikee", "AddLike", "PostLikes", new { PostId = Model.PostId, UserId = ViewBag.CurrentUser.Item1 }, new { @class = "btn btn-outline-primary btn-sm" })
-        <span>69</span>
-        <a class="btn btn-success pull-left" href="/Posts/Edit/@Model.PostId">Edit post</a>
-        @using (Html.BeginForm(actionName: "Delete", controllerName: "Posts", method: FormMethod.Post, routeValues: new { id = Model.PostId }))
-        {
-            @Html.HttpMethodOverride(HttpVerbs.Delete)
-            <button class="btn btn-danger pull-right" type="submit">Delete post</button>
-        }
+            <a class="btn btn-success pull-left" href="/Posts/Edit/@Model.PostId">Edit post</a>
+            @using (Html.BeginForm(actionName: "Delete", controllerName: "Posts", method: FormMethod.Post, routeValues: new { id = Model.PostId }))
+            {
+                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                <button class="btn btn-danger pull-right" type="submit">Delete post</button>
+            }
 
-        <div class="clearfix"></div>
-    </div>
+            <div class="clearfix"></div>
+        </div>
     }
+
+    @*Likes*@
+    
+    <form method="post" action="/PostLikes/New">
+        <input type="hidden" name="PostId" value="@Model.PostId" />
+        <input type="hidden" name="UserId" value="@ViewBag.CurrentUser.Item1" />
+        <button type="submit"> <span class='glyphicon glyphicon-thumbs-up'></span> like </button>
+    </form>
+    
+    <span>@Model.LikeCount</span>
+    @foreach (var em in ViewBag.UsersWhoLiked)
+    {
+        <span>@em</span>
+    }
+
+    <span>@ViewBag.IsLikedByCurrentUser</span>
 </div>
 
 <!--This is the comments section-->
 <br />
+
 @foreach (var comm in Model.Comments)
 {
     @Html.Partial("CommentInfo", comm);
