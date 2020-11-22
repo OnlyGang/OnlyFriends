@@ -25,12 +25,10 @@ namespace OnlyFriends.Controllers
             try
             {
                 db.PostLikes.Add(postlike);
-                
                 db.Posts.Find(postlike.PostId).LikeCount++;
                 db.SaveChanges();
                 return Redirect("/Posts/Show/" + postlike.PostId);
             }
-
             catch (Exception e)
             {
                 return Redirect("/Posts/Show/" + postlike.PostId);
@@ -40,13 +38,13 @@ namespace OnlyFriends.Controllers
 
         [Authorize(Roles = "User,Editor,Admin")]
         [HttpDelete]
-        public ActionResult Delete(PostLike postlike)
+        public ActionResult Delete(int PostId, string UserId)
         {
-            PostLike ToDelete = db.PostLikes.Find(postlike.PostId, postlike.UserId);
+            PostLike ToDelete = db.PostLikes.Find(PostId, UserId);
             db.PostLikes.Remove(ToDelete);
-            db.Posts.Find(postlike.PostId).LikeCount--;
+            db.Posts.Find(PostId).LikeCount--;
             db.SaveChanges();
-            return Redirect("/Posts/Show/" + postlike.PostId);
+            return Redirect("/Posts/Show/" + PostId);
         }
     }
 }

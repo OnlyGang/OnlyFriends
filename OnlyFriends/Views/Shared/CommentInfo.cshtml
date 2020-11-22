@@ -6,6 +6,9 @@
                 <p>@Model.Content</p>
                 <small class="pull-right">@Model.Date</small>
             </div>
+            <div style="display: inline-block; float: left; margin-right: 15px">
+                <span class="glyphicon glyphicon-thumbs-up"></span>
+            </div>
             @if (ViewBag.CurrentUser.Item2 || ViewBag.CurrentUser.Item1 == Model.UserId)
             {
                 <div style="display: inline-block; float : left; margin-right: 15px">

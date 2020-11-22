@@ -1,28 +1,26 @@
 ﻿@model OnlyFriends.Models.Post
 
-<h2>@ViewBag.Curr</h2>
-<h2>Adaugare postare</h2>
+<h2>Add a new post</h2>
 
 @using (Html.BeginForm(actionName: "New", controllerName: "Posts"))
 {
 
     @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
-    @Html.Label("Title", "Titlu post")
+    @Html.Label("Title", "Title")
     <br />
     @Html.TextBox("Title", null, new { @class = "form-control" })
     @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
     <br />
     <br />
 
-    @Html.Label("Content", "Continut Postare")
+    @Html.Label("Content", "Content:")
     <br />
     @Html.TextArea("Content", null, new { @class = "form-control" })
     @Html.ValidationMessage("Content", "", new { @class = "text-danger" })
     <br />
     <br />
 
- 
-
-    <button class="btn btn-sm btn-success" type="submit">Adauga postare</button>
+    <button class="btn btn-success block" type="submit">Add post</button>
+    @Html.ActionLink("Back to posts", "Index", "Posts", new { @class = "btn btn-warning block" })
 }

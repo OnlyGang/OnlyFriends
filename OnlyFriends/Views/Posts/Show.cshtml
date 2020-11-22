@@ -3,10 +3,10 @@
 @{
     ViewBag.Title = "Show";
 }
+
 <br />
-<a href="/Posts/Index">Back to Posts</a>
-<br />
-<a class="btn btn-info" href="/Posts/New">Add post</a>
+@Html.ActionLink("Back to posts", "Index", "Posts", new { @class = "btn btn-warning block" })
+@Html.ActionLink("Add post", "new", "Posts", new { @class = "btn btn-info block" })
 <br />
 <div class="panel panel-default">
 
@@ -26,31 +26,30 @@
         </div>
     }
 
-    @*Likes*@
+    <!--Like section-->
     @if (!ViewBag.IsLikedByCurrentUser)
     {
-        <form method="post" action="/PostLikes/New">
-            <input type="hidden" name="PostId" value="@Model.PostId" />
-            <input type="hidden" name="UserId" value="@ViewBag.CurrentUser.Item1" />
-            <button type="submit"> <span class='glyphicon glyphicon-thumbs-up'></span> like </button>
-        </form>
+        using (Html.BeginForm(actionName: "New", controllerName: "PostLikes", method: FormMethod.Post))
+        {
+            @Html.Hidden("PostId", Model.PostId)
+            @Html.Hidden("UserId", (string)ViewBag.CurrentUser.Item1)
+            <button type="submit"><span class='glyphicon glyphicon-thumbs-up'></span> Like </button>
+            <span>@Model.LikeCount</span>
+        }
     }
     else
     {
-        <form method="post" action="/PostLikes/Delete">
+        using (Html.BeginForm(actionName: "Delete", controllerName: "PostLikes", method: FormMethod.Post, routeValues: new { PostId = Model.PostId, UserId = (string)ViewBag.CurrentUser.Item1 }))
+        {
             @Html.HttpMethodOverride(HttpVerbs.Delete)
-            <input type="hidden" name="PostId" value="@Model.PostId" />
-            <input type="hidden" name="UserId" value="@ViewBag.CurrentUser.Item1" />
-            <button type="submit" style="color: blue"> <span class='glyphicon glyphicon-thumbs-up'></span> like </button>
-        </form>
+            <button type="submit" style="color: blue"><span class='glyphicon glyphicon-thumbs-up'></span> Like </button>
+            <span>@Model.LikeCount</span>
+        }
     }
-    <span>@Model.LikeCount</span>
-    @foreach (var em in ViewBag.UsersWhoLiked)
-    {
-        <span>@em</span>
-    }
-
-    <span>@ViewBag.IsLikedByCurrentUser</span>
+    @*@foreach (var em in ViewBag.UsersWhoLiked)
+        {
+          <span>@em</span>
+        }*@
 </div>
 
 <!--This is the comments section-->
