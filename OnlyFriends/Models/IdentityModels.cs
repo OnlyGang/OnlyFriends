@@ -17,7 +17,8 @@ namespace OnlyFriends.Models
             // Add custom user claims here
             return userIdentity;
         }
-
+        public virtual ICollection<Post> Posts { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<PostLike> PostLikes { get; set; }
         public virtual ICollection<CommentLike> CommentLikes { get; set; }
     }

@@ -74,16 +74,22 @@
         </div>
         <div class="col-md-8">
             <div class="panel">
-                <form method="post" action="/Comments/New">
+                @using (Html.BeginForm(actionName: "New", controllerName: "Comments"))
+                {
                     <div class="panel-body">
-                        <input type="hidden" name="PostId" value="@Model.PostId" />
-                        <label>Enter your comment</label>
+                        @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
+
+                        @Html.Hidden("PostId", Model.PostId)
+                        @Html.Label("Content", "Enter your comment")
                         <br />
-                        <textarea class="form-control" name="Content"></textarea>
+                        @Html.TextArea("Content", "", new { @class = "form-control" })
+                        @*@Html.ValidationMessage("Content", "Mesaj", new { @class = "text-danger" })*@
                         <br />
                         <button class="btn btn-success " type="submit">Add comment</button>
                     </div>
-                </form>
+                }
+                <br />
+                <br />
             </div>
         </div>
         <div class="col-md-2"></div>

@@ -10,14 +10,14 @@
     @Html.Label("Title", "Title")
     <br />
     @Html.TextBox("Title", null, new { @class = "form-control" })
-    @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
+    @Html.ValidationMessage("Title", null, new { @class = "text-danger" })
     <br />
     <br />
 
     @Html.Label("Content", "Content:")
     <br />
     @Html.TextArea("Content", null, new { @class = "form-control" })
-    @Html.ValidationMessage("Content", "", new { @class = "text-danger" })
+    @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
     <br />
     <br />
 

@@ -7,11 +7,12 @@
 <h2>Edit comment</h2>
 @using (Html.BeginForm(actionName: "Edit", controllerName: "Comments", method: FormMethod.Post))
 {
-    @Html.ValidationSummary();
+    @*@Html.ValidationSummary();*@
     @Html.HttpMethodOverride(HttpVerbs.Put)
     @Html.Label("Content", "Content:")
     <br />
-    @Html.TextArea("Content", Model.Content)
+    @Html.TextArea("Content", Model.Content, new { @class = "form-control" })
+    @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
     <br />
     @Html.HiddenFor(m => m.Date)
     <button class="btn btn-success" type="submit">Edit</button>

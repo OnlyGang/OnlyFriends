@@ -13,7 +13,7 @@ namespace OnlyFriends.Models
         public int CommentId { get; set; }
         [Required]
         public int PostId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Comment content is required")][MaxLength(3000)]
         public string Content { get; set; }
         public DateTime Date { get; set; }
         public string UserId { get; set; }

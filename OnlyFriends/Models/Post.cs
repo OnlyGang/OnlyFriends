@@ -12,8 +12,9 @@ namespace OnlyFriends.Models
         [Key]
         public int PostId { get; set; }
        
-        [Required]
+        [Required(ErrorMessage = "Title is required")][MaxLength(200, ErrorMessage = "{0} can have a max of {1} characters")]
         public string Title { get; set; }
+        [Required(ErrorMessage = "Post content is required")][MaxLength(5000, ErrorMessage = "{0} can have a max of {1} characters")]
         public string Content { get; set; }
         [Required]
         public DateTime Date { get; set; }
