@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Welcome to Groups</h2>
+
+@foreach(OnlyFriends.Models.Group group in ViewBag.Groups)
+{
+    <p>@group.Title</p>
+    <p>@group.User.Email</p>
+}
+
