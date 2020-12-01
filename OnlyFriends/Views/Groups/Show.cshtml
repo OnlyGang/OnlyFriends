@@ -4,6 +4,46 @@
 <h1>@ViewBag.Message</h1>
 <h2>News</h2>
 
+
+
+
+@if (!ViewBag.IsMember)
+{
+    if (!@Model.IsPrivate)
+    {
+        using (Html.BeginForm(actionName: "New", controllerName: "GroupMembers", method: FormMethod.Post))
+        {
+            @Html.Hidden("GroupId", (int)Model.GroupId)
+            @Html.Hidden("UserId", (string)ViewBag.CurrentUser.Item1)
+            <button type="submit" class="btn btn-primary">Join Group</button>
+        }
+    }
+    else
+    {
+        using (Html.BeginForm(actionName: "New", controllerName: "GroupRequests", method: FormMethod.Post))
+        {
+            @Html.Hidden("GroupId", (int)Model.GroupId)
+            @Html.Hidden("SenderId", (string)ViewBag.CurrentUser.Item1)
+            <button type="submit" class="btn btn-primary">Send Request</button>
+        }
+    }
+}
+else
+{
+    using (Html.BeginForm(actionName: "Delete", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { GroupId = Model.GroupId, UserId = (string)ViewBag.CurrentUser.Item1 }))
+    {
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+        TempData["ReturnTo"] = "Groups";
+        <button type="submit" class="btn btn-primary">Leave Group</button>
+    }
+}
+
+@foreach (var gm in Model.GroupMembers)
+{
+    <span style="display: inline-block; font-size: 90%">@gm.User.Email</span>
+}
+
+
 @if (ViewBag.CurrentUser.Item2)
 {
     using (Html.BeginForm(actionName: "Delete", controllerName: "Groups", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
@@ -39,6 +79,7 @@
         </div>
     }
 }
+
 @foreach (var post in Model.Posts)
 {
     <div class="panel panel-default">

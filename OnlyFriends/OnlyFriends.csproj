@@ -170,6 +170,8 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CommentLikesController.cs" />
     <Compile Include="Controllers\CommentsController.cs" />
+    <Compile Include="Controllers\GroupMembersController.cs" />
+    <Compile Include="Controllers\GroupRequestsController.cs" />
     <Compile Include="Controllers\GroupsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -193,6 +195,7 @@
     <Compile Include="Models\FriendRequest.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\GroupMember.cs" />
+    <Compile Include="Models\GroupRequest.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Post.cs" />
@@ -268,6 +271,9 @@
     <Content Include="Views\Groups\Show.cshtml" />
     <Content Include="Views\Shared\GroupInfo.cshtml" />
     <Content Include="Views\Groups\Edit.cshtml" />
+    <Content Include="Views\GroupMembers\Index.cshtml" />
+    <Content Include="Views\GroupMembers\Show.cshtml" />
+    <Content Include="Views\GroupRequests\Show.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

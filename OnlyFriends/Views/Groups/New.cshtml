@@ -17,7 +17,10 @@
     @Html.TextArea("Description", null, new { @class = "form-control" })
     @Html.ValidationMessage("Description", null, new { @class = "text-danger" })
     <br />
+    @Html.Label("IsPrivate", "Make private:");
+    @Html.CheckBox("IsPrivate", false)
     <br />
+    
     <br />
 
     <button class="btn btn-success block" type="submit">Add group</button>

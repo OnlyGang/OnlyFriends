@@ -40,6 +40,10 @@ namespace OnlyFriends.Controllers
                 if (ModelState.IsValid)
                 {
                     db.Groups.Add(group);
+                    GroupMember groupmember = new GroupMember();
+                    groupmember.GroupId = group.GroupId;
+                    groupmember.UserId = group.UserId;
+                    db.GroupMembers.Add(groupmember);
                     db.SaveChanges();
                     TempData["message"] = "The group has been created!";
                     return RedirectToAction("Index");
@@ -61,6 +65,7 @@ namespace OnlyFriends.Controllers
             var group = db.Groups.Find(id);
             ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), group.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
             ViewBag.IsMember = db.GroupMembers.Find(id, User.Identity.GetUserId()) != null;
+
             return View(group);
 
         }

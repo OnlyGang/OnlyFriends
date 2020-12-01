@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Show";
+}
+
+<h2>@ViewBag.Group.Title</h2>
+<h2>members</h2>
+
+@foreach (var gr in ViewBag.GroupRequests)
+{
+    <div style="display: inline-block; float: left; margin-right: 20px;">
+        <p>@gr.User.Email</p>
+    </div>
+    if (ViewBag.CurrentUser.Item2)
+    {
+    <div style="display: inline-block; margin-right: 20px">
+        @using (Html.BeginForm(actionName: "Delete", controllerName: "GroupRequests", method: FormMethod.Post, routeValues: new { SenderId = gr.SenderId, GroupId = gr.GroupId }))
+        {
+            @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+            <button class="glyphicon glyphicon-trash" style="border: none; background: transparent;" type="submit"></button>
+        }
+        @using (Html.BeginForm(actionName: "Accept", controllerName: "GroupRequests", method: FormMethod.Post, routeValues: new { SenderId = gr.SenderId, GroupId = gr.GroupId }))
+        {
+            @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+            <button class="glyphicon glyphicon-check" style="border: none; background: transparent;" type="submit"></button>
+        }
+
+        <hr />
+    </div>
+    }
+}
+

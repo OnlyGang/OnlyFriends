@@ -23,6 +23,7 @@ namespace OnlyFriends.Models
         public virtual ICollection<CommentLike> CommentLikes { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
         public virtual ICollection<GroupMember> GroupMembers { get; set; }
+        public virtual ICollection<GroupRequest> GroupRequests { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -40,6 +41,7 @@ namespace OnlyFriends.Models
         public DbSet<CommentLike> CommentLikes { get; set; }
         public DbSet<Group> Groups { get;  set; }
         public DbSet<GroupMember> GroupMembers { get;  set; }
+        public DbSet<GroupRequest> GroupRequests { get; set; }
 
         public static ApplicationDbContext Create()
         {
