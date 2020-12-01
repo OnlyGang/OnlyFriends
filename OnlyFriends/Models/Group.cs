@@ -13,6 +13,7 @@ namespace OnlyFriends.Models
         public string UserId { get; set; }
         [Required]
         public string Title { get; set; }
+        public string Description { get; set; }
         public DateTime Date { get; set; }
 
         public virtual ApplicationUser User { get; set; }

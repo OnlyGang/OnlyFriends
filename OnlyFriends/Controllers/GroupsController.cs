@@ -60,7 +60,84 @@ namespace OnlyFriends.Controllers
         {
             var group = db.Groups.Find(id);
             ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), group.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
+            ViewBag.IsMember = db.GroupMembers.Find(id, User.Identity.GetUserId()) != null;
             return View(group);
+
+        }
+
+        [Authorize(Roles = "User,Editor,Admin")]
+        public ActionResult Edit(int id)
+        {
+
+            Group group = db.Groups.Find(id);
+            if (group.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"))
+            {
+                return View(group);
+            }
+            else
+            {
+                TempData["message"] = "You don't have enough permissions to modify this group!";
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpPut]
+        [Authorize(Roles = "User,Editor,Admin")]
+        public ActionResult Edit(int id, Group requestGroup)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    Group group = db.Groups.Find(id);
+                    if (group.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"))
+                    {
+                        if (TryUpdateModel(group))
+                        {
+                            group.Title = requestGroup.Title;
+                            group.Description = requestGroup.Description;
+                            group.Date = requestGroup.Date;
+                            db.SaveChanges();
+                            TempData["message"] = "The group has been successfully changed!";
+                            return RedirectToAction("Show/" + id);
+                        }
+
+                        return View(requestGroup);
+                    }
+                    else
+                    {
+                        TempData["message"] = "You don't have enough permissions to modify this Group!";
+                        return RedirectToAction("Index");
+                    }
+                }
+                else
+                {
+                    return View(requestGroup);
+                }
+            }
+            catch (Exception e)
+            {
+                return View(requestGroup);
+            }
+        }
+
+        [HttpDelete]
+        [Authorize(Roles = "User,Editor,Admin")]
+        public ActionResult Delete(int id)
+        {
+            Group group = db.Groups.Find(id);
+            if (group.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"))
+            {
+                db.Groups.Remove(group);
+                db.SaveChanges();
+                TempData["message"] = "The group was deleted";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["message"] = "You don't have enough permissions to modify this post!";
+                return RedirectToAction("Index");
+            }
 
         }
 

@@ -1,14 +1,44 @@
 ﻿@model OnlyFriends.Models.Group
-@{
-    ViewBag.Title = "Index";
-}
+
+
 <h1>@ViewBag.Message</h1>
 <h2>News</h2>
 
+@if (ViewBag.CurrentUser.Item2)
+{
+    using (Html.BeginForm(actionName: "Delete", controllerName: "Groups", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
+    {
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+        <button class="btn btn-danger pull-right" type="submit">Delete Group</button>
+    }
 
-<a class="btn btn-primary" href="/Posts/New">Add post</a>
-<br />
+    using (Html.BeginForm(actionName: "Edit", controllerName: "Groups", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
+    {
+        @Html.HttpMethodOverride(HttpVerbs.Put)
+        <button class="btn btn-primary pull-right" type="submit">Edit Group</button>
+    }
+}
 
+@if (ViewBag.IsMember || ViewBag.CurrentUser.Item2)
+{
+    using (Html.BeginForm(actionName: "New", controllerName: "Posts"))
+    {
+        <div class="panel-body">
+            @Html.Hidden("GroupId", Model.GroupId)
+            @Html.Label("Title", "Title")
+            <br />
+            @Html.TextBox("Title", "", new { @class = "form-control" })
+            @Html.ValidationMessage("Title", null, new { @class = "text-danger" })
+            <br />
+            @Html.Label("Content", "Content")
+            <br />
+            @Html.TextArea("Content", "", new { @class = "form-control" })
+            @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
+            <br />
+            <button class="btn btn-success " type="submit">Add Post</button>
+        </div>
+    }
+}
 @foreach (var post in Model.Posts)
 {
     <div class="panel panel-default">

@@ -35,6 +35,7 @@ namespace OnlyFriends.Controllers
             Post post = db.Posts.Find(id);
             ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), post.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
             ViewBag.IsLikedByCurrentUser = (db.PostLikes.Find(id, User.Identity.GetUserId()) != null);
+           // ViewBag.IsF
             return View(post);
 
         }
@@ -64,6 +65,10 @@ namespace OnlyFriends.Controllers
                     db.Posts.Add(post);
                     db.SaveChanges();
                     TempData["message"] = "Postarea a fost adaugata!";
+                    if(post.GroupId != null)
+                    {
+                        return Redirect($"/Groups/Show/{post.GroupId}");
+                    }
                     return RedirectToAction("Index");
                 }
                 else
@@ -108,6 +113,7 @@ namespace OnlyFriends.Controllers
                         {
                             post.Title = requestPost.Title;
                             post.Content = requestPost.Content;
+                            post.Date = requestPost.Date;
                             db.SaveChanges();
                             TempData["message"] = "The post has been successfully changed!";
                             return RedirectToAction("Show/" + id);

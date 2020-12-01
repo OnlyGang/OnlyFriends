@@ -5,9 +5,15 @@
 
 <h2>Welcome to Groups</h2>
 
-@foreach(OnlyFriends.Models.Group group in ViewBag.Groups)
+@Html.ActionLink("Create a new group", "New", "Groups", new { @class = "btn btn-info block" })
+<br />
+
+@foreach (OnlyFriends.Models.Group group in ViewBag.Groups)
 {
-    <p>@group.Title</p>
-    <p>@group.User.Email</p>
+    @Html.Partial("GroupInfo", group)
+
+    <div class="panel-footer">
+        <a class=" btn btn-sm btn btn-success" href="/Groups/Show/@group.GroupId">View Group</a>
+    </div>
 }
 

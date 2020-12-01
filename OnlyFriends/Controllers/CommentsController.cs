@@ -77,6 +77,7 @@ namespace OnlyFriends.Controllers
                         if (TryUpdateModel(comm))
                         {
                             comm.Content = requestComment.Content;
+                            comm.Date = requestComment.Date;
                             TempData["message"] = "The comment has been successfully changed!";
                             db.SaveChanges();
                             return Redirect("/Posts/Show/" + comm.PostId);

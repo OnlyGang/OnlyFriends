@@ -5,9 +5,13 @@
 }
 
 <br />
+@if (Model.GroupId != null) {
+    @Html.ActionLink("Back to Group", "Show", "Groups", new { id = Model.GroupId }, new { @class = "btn btn-info block" });
+}
 @Html.ActionLink("Back to posts", "Index", new { controller = "Posts" }, new { @class = "btn btn-warning block" })
-@Html.ActionLink("Add post", "New", new { controller = "Posts" }, new { @class = "btn btn-info block" })
 <br />
+
+
 <div class="panel panel-default">
 
     @Html.Partial("PostInfo", Model)
@@ -47,15 +51,15 @@
         }
     }
 
-    @if (Model.LikeCount > 0) 
-    { 
-    <div>
-        <span style="display: inline-block; font-weight: bold; font-size: 90%">Liked By:</span>
-        @foreach (var pl in Model.PostLikes)
-        {
-            <span style="display: inline-block; font-size: 90%">@pl.User.Email</span>
-        }
-    </div>
+    @if (Model.LikeCount > 0)
+    {
+        <div>
+            <span style="display: inline-block; font-weight: bold; font-size: 90%">Liked By:</span>
+            @foreach (var pl in Model.PostLikes)
+            {
+                <span style="display: inline-block; font-size: 90%">@pl.User.Email</span>
+            }
+        </div>
     }
 </div>
 
