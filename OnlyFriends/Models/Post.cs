@@ -22,6 +22,7 @@ namespace OnlyFriends.Models
         public int LikeCount { get; set; }
         public string UserId { get; set; }
         public int GroupId { get; set; }
+
         public virtual ApplicationUser User { get; set; }
         public virtual Group Group { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }

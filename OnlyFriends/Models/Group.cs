@@ -16,7 +16,7 @@ namespace OnlyFriends.Models
         public DateTime Date { get; set; }
 
         public virtual ApplicationUser User { get; set; }
-         public virtual ICollection<Post> Posts { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<GroupMember> GroupMembers { get; set; }
     }
 
