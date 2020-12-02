@@ -20,6 +20,7 @@ namespace OnlyFriends
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
             app.CreatePerOwinContext<ApplicationRoleManager>(ApplicationRoleManager.Create);
 
+
             // Enable the application to use a cookie to store information for the signed in user
             // and to use a cookie to temporarily store information about a user logging in with a third party login provider
             // Configure the sign in cookie
@@ -55,15 +56,15 @@ namespace OnlyFriends
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "301916967752611",
+               appSecret: "8b23fd0b7a86b7956056d155dd71594b");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "831848271613-7fr9u1l6lfus698f9bdm2rkdurl7okr9.apps.googleusercontent.com",
+                ClientSecret = "6skpkgFIL6c9yAw3W2_nRQsG"
+            });
         }
     }
 }
