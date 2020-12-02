@@ -9,7 +9,7 @@ namespace OnlyFriends.Models
 {
     public class FriendRequest
     {
-        /*[Key]
+      /*  [Key]
         [Column(Order = 0)]
         public string SenderId { get; set; }
         [Key]

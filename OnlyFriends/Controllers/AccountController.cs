@@ -139,9 +139,6 @@ namespace OnlyFriends.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-
-
-
             return View();
         }
 
@@ -158,8 +155,8 @@ namespace OnlyFriends.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     UserManager.AddToRole(user.Id, "User");
+                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link

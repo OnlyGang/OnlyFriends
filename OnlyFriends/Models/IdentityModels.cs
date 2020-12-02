@@ -1,9 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin;
 
 namespace OnlyFriends.Models
 {
@@ -17,6 +22,10 @@ namespace OnlyFriends.Models
             // Add custom user claims here
             return userIdentity;
         }
+        [DefaultValue(false)]
+        public bool IsPrivate { get; set; }
+        public IEnumerable<SelectListItem> AllRoles { get; internal set; }
+
         public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<PostLike> PostLikes { get; set; }
@@ -24,6 +33,27 @@ namespace OnlyFriends.Models
         public virtual ICollection<Group> Groups { get; set; }
         public virtual ICollection<GroupMember> GroupMembers { get; set; }
         public virtual ICollection<GroupRequest> GroupRequests { get; set; }
+        
+        // Asta e pentru friend requests
+        /*[ForeignKey("SenderId")]
+        public virtual ICollection<FriendRequest> SentFriendRequests { get; set; }
+        [ForeignKey("RecieverId")]
+        public virtual ICollection<FriendRequest> ReceivedFriendRequests { get; set; }*/
+    }
+
+    public class ApplicationRoleManager : RoleManager<IdentityRole>
+    {
+        public ApplicationRoleManager(IRoleStore<IdentityRole, string> store) :
+        base(store)
+        {
+        }
+        public static ApplicationRoleManager
+        Create(IdentityFactoryOptions<ApplicationRoleManager> options, IOwinContext context)
+        {
+            var roleStore = new
+            RoleStore<IdentityRole>(context.Get<ApplicationDbContext>());
+            return new ApplicationRoleManager(roleStore);
+        }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -42,6 +72,7 @@ namespace OnlyFriends.Models
         public DbSet<Group> Groups { get;  set; }
         public DbSet<GroupMember> GroupMembers { get;  set; }
         public DbSet<GroupRequest> GroupRequests { get; set; }
+        //public DbSet<FriendRequest> FriendRequests { get; set; }
 
         public static ApplicationDbContext Create()
         {
