@@ -32,6 +32,7 @@ namespace OnlyFriends.Controllers
                                 select role.Name).First();
 
             ViewBag.RoleName = userRoleName;
+            ViewBag.IsFriendRequestSent = (db.FriendRequests.Find(User.Identity.GetUserId(), id) != null);
             return View(user);
         }
 

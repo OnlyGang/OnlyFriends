@@ -15,17 +15,35 @@
     <br />
     @if (Model.PhoneNumber != null)
     {
-        <i class="glyphicon glyphicon-phone"></i>@:PhoneNumber:<span class="label label-default">@Model.PhoneNumber</span>
+    <i class="glyphicon glyphicon-phone"></i>@:PhoneNumber:<span class="label label-default">@Model.PhoneNumber</span>
     }
 </div>
 
 
 @if (ViewBag.CurrentUser.Item1 == Model.Id || ViewBag.CurrentUser.Item2)
 {
-    <div class="panel-footer">
-        <a class="btn btn-sm btn-success" href="/Users/Edit/@Model.Id">Edit</a>
-    </div>
-    <br />
+<div class="panel-footer">
+    <a class="btn btn-sm btn-success" href="/Users/Edit/@Model.Id">Edit</a>
+</div>
+<br />
+}
+
+@if (!ViewBag.IsFriendRequestSent)
+{
+    using (Html.BeginForm(actionName: "New", controllerName: "FriendRequests", method: FormMethod.Post))
+    {
+@Html.Hidden("RecieverId", Model.Id)
+@Html.Hidden("SenderId", (string)ViewBag.CurrentUser.Item1)
+<button type="submit" class='btn btn-success'> Send Friend Request </button>
+    }
+}
+else
+{
+    using (Html.BeginForm(actionName: "Delete", controllerName: "FriendRequests", method: FormMethod.Post, routeValues: new { SenderId = (string)ViewBag.CurrentUser.Item1, RecieverId = Model.Id }))
+    {
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+        <button type="submit" class='btn btn-danger'>Cancel Request</button>
+    }
 }
 
 <br />

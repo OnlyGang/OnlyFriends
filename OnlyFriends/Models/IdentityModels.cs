@@ -33,12 +33,14 @@ namespace OnlyFriends.Models
         public virtual ICollection<Group> Groups { get; set; }
         public virtual ICollection<GroupMember> GroupMembers { get; set; }
         public virtual ICollection<GroupRequest> GroupRequests { get; set; }
-        
-        // Asta e pentru friend requests
-        /*[ForeignKey("SenderId")]
+
+        // Asta e pentru Friend Requests (Many-to-Many pe acelasi tabel)
         public virtual ICollection<FriendRequest> SentFriendRequests { get; set; }
-        [ForeignKey("RecieverId")]
-        public virtual ICollection<FriendRequest> ReceivedFriendRequests { get; set; }*/
+        public virtual ICollection<FriendRequest> ReceivedFriendRequests { get; set; }
+
+        // Asta e pentru User Relations (Many-to-Many pe acelasi tabel)
+        public virtual ICollection<UserRelation> MyUserRetations { get; set; }
+        public virtual ICollection<UserRelation> OthersUserRelations { get; set; }
     }
 
     public class ApplicationRoleManager : RoleManager<IdentityRole>
@@ -72,7 +74,38 @@ namespace OnlyFriends.Models
         public DbSet<Group> Groups { get;  set; }
         public DbSet<GroupMember> GroupMembers { get;  set; }
         public DbSet<GroupRequest> GroupRequests { get; set; }
-        //public DbSet<FriendRequest> FriendRequests { get; set; }
+        public DbSet<FriendRequest> FriendRequests { get; set; }
+        public DbSet<UserRelation> UserRelations { get; set; }
+
+        // Asta e pentru friend requests ca sa functioneze (sterge on delete cascade)
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<FriendRequest>()
+                .HasRequired(pt => pt.Reciever)
+                .WithMany(p => p.ReceivedFriendRequests)
+                .HasForeignKey(pt => pt.RecieverId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<FriendRequest>()
+                .HasRequired(pt => pt.Sender)
+                .WithMany(p => p.SentFriendRequests)
+                .HasForeignKey(pt => pt.SenderId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<UserRelation>()
+                .HasRequired(pt => pt.User1)
+                .WithMany(p => p.MyUserRetations)
+                .HasForeignKey(pt => pt.User1Id)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<UserRelation>()
+                .HasRequired(pt => pt.User2)
+                .WithMany(p => p.OthersUserRelations)
+                .HasForeignKey(pt => pt.User2Id)
+                .WillCascadeOnDelete(false);
+        }
 
         public static ApplicationDbContext Create()
         {
