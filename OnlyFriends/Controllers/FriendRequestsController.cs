@@ -44,6 +44,35 @@ namespace OnlyFriends.Controllers
 
         }
 
+        [HttpDelete]
+        [Authorize(Roles = "User,Editor,Admin")]
+        public ActionResult Accept(string SenderId, string RecieverId)
+        {
+            FriendRequest ToDelete = db.FriendRequests.Find(SenderId, RecieverId);
+            db.FriendRequests.Remove(ToDelete);
+            db.SaveChanges();
+            UserRelation req = db.UserRelations.Find(SenderId, RecieverId);
+
+            var URC = new UserRelationsController();
+            if (req != null)
+            {
+                URC.Edit(req);
+                return RedirectToAction("Show", "Users", new { id = RecieverId });
+                //return RedirectToAction("Edit", "UsersRelations", new { request = req });
+            }
+            else
+            {
+                UserRelation newRel = new UserRelation();
+                newRel.User1Id = SenderId;
+                newRel.User2Id = RecieverId;
+                newRel.Status = "Friend";
+                URC.New(newRel);
+                return RedirectToAction("Show", "Users", new { id = RecieverId });
+                //return RedirectToAction("New", "UsersRelations", new { userrelation = newRel });
+            }
+        }
+        
+
         [Authorize(Roles = "User,Editor,Admin")]
         [HttpDelete]
         public ActionResult Delete(string SenderId, string RecieverId)

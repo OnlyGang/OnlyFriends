@@ -15,29 +15,41 @@
     <br />
     @if (Model.PhoneNumber != null)
     {
-    <i class="glyphicon glyphicon-phone"></i>@:PhoneNumber:<span class="label label-default">@Model.PhoneNumber</span>
+        <i class="glyphicon glyphicon-phone"></i>@:PhoneNumber:<span class="label label-default">@Model.PhoneNumber</span>
     }
 </div>
 
 
 @if (ViewBag.CurrentUser.Item1 == Model.Id || ViewBag.CurrentUser.Item2)
 {
-<div class="panel-footer">
-    <a class="btn btn-sm btn-success" href="/Users/Edit/@Model.Id">Edit</a>
-</div>
-<br />
+    <div class="panel-footer">
+        <a class="btn btn-sm btn-success" href="/Users/Edit/@Model.Id">Edit</a>
+    </div>
+    <br />
 }
 
-@if (!ViewBag.IsFriendRequestSent)
+<!--
+    Niciuna - Send, Follow, Block
+    Friend - Buton Block si Unfriend
+    Follow - Send Request, Unfollow, Block
+    IsFollowed - Send Request, Follow, Block
+    Blocked - Unblock
+    IsBlocked - You can't view this page
+
+    Daca avem Follow back -> ii facem prieteni <=> send request
+-->
+<!-- Send/Cancel Friend Request -->
+
+@if (!ViewBag.IsFriendRequestSent && ViewBag.Relation == null)
 {
     using (Html.BeginForm(actionName: "New", controllerName: "FriendRequests", method: FormMethod.Post))
     {
-@Html.Hidden("RecieverId", Model.Id)
-@Html.Hidden("SenderId", (string)ViewBag.CurrentUser.Item1)
-<button type="submit" class='btn btn-success'> Send Friend Request </button>
+        @Html.Hidden("RecieverId", Model.Id)
+        @Html.Hidden("SenderId", (string)ViewBag.CurrentUser.Item1)
+        <button type="submit" class='btn btn-success'> Send Friend Request </button>
     }
 }
-else
+else if (ViewBag.Relation == null)
 {
     using (Html.BeginForm(actionName: "Delete", controllerName: "FriendRequests", method: FormMethod.Post, routeValues: new { SenderId = (string)ViewBag.CurrentUser.Item1, RecieverId = Model.Id }))
     {
@@ -46,4 +58,108 @@ else
     }
 }
 
-<br />
+@if (ViewBag.Relation == null)
+{
+    @Html.Partial("ButtonType",
+                    new ViewDataDictionary(ViewData)
+                    {
+                        {"User1Id", ViewBag.CurrentUser.Item1},
+                        {"User2Id", Model.Id},
+                        {"Method", "New" },
+                        {"Type", "Follow" },
+                        {"Status", "Follows" }
+
+                    });
+
+    @Html.Partial("ButtonType",
+                new ViewDataDictionary(ViewData)
+                {
+                    {"User1Id", ViewBag.CurrentUser.Item1},
+                    {"User2Id", Model.Id},
+                    {"Method", "New" },
+                    {"Type", "Block" },
+                    {"Status", "Blocked" }
+
+                });
+
+}
+else
+{
+    switch (ViewBag.Relation.Status)
+    {
+        case "Friend":
+            {
+                @Html.Partial("ButtonType",
+                new ViewDataDictionary(ViewData)
+                {
+                    {"User1Id", ViewBag.CurrentUser.Item1},
+                    {"User2Id", Model.Id},
+                    {"Method", "Delete" },
+                    {"Type", "Unfriend" },
+                    {"Status", "" }
+
+                });
+                @Html.Partial("ButtonType",
+                new ViewDataDictionary(ViewData)
+                {
+                    {"User1Id", ViewBag.CurrentUser.Item1},
+                    {"User2Id", Model.Id},
+                    {"Method", "Edit" },
+                    {"Type", "Block" },
+                    {"Status", "Blocked" }
+
+                });
+                break;
+            }
+        case "Follows":
+            {
+                @Html.Partial("ButtonType",
+                new ViewDataDictionary(ViewData)
+                {
+                    {"User1Id", ViewBag.CurrentUser.Item1},
+                    {"User2Id", Model.Id},
+                    {"Method", "Delete" },
+                    {"Type", "Unfollow" },
+                    {"Status", "" }
+
+                });
+                @Html.Partial("ButtonType",
+                new ViewDataDictionary(ViewData)
+                {
+                    {"User1Id", ViewBag.CurrentUser.Item1},
+                    {"User2Id", Model.Id},
+                    {"Method", "Edit" },
+                    {"Type", "Block" },
+                    {"Status", "Blocked" }
+
+                });
+                break;
+            }
+        case "IsFollowed":
+            {
+                @Html.Partial("ButtonType",
+                new ViewDataDictionary(ViewData)
+                {
+                    {"User1Id", ViewBag.CurrentUser.Item1},
+                    {"User2Id", Model.Id},
+                    {"Method", "Edit" },
+                    {"Type", "Follow" },
+                    {"Status", "Friend" }
+
+                });
+                @Html.Partial("ButtonType",
+                new ViewDataDictionary(ViewData)
+                {
+                    {"User1Id", ViewBag.CurrentUser.Item1},
+                    {"User2Id", Model.Id},
+                    {"Method", "Edit" },
+                    {"Type", "Block" },
+                    {"Status", "Blocked" }
+
+                });
+                break;
+            }
+    }
+}
+
+

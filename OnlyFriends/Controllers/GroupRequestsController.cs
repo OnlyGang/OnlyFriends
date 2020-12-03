@@ -74,8 +74,8 @@ namespace OnlyFriends.Controllers
             GroupMember ToAdd = new GroupMember();
             ToAdd.GroupId = GroupId;
             ToAdd.UserId = SenderId;
-            var dummy = new GroupMembersController();
-            dummy.New(ToAdd);
+            var GMC = new GroupMembersController();
+            GMC.New(ToAdd);
 
             return RedirectToAction("Show", "Groups", new { id = GroupId });
         }

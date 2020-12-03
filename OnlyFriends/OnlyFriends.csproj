@@ -178,6 +178,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PostLikesController.cs" />
     <Compile Include="Controllers\PostsController.cs" />
+    <Compile Include="Controllers\UserRelationsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -280,6 +281,8 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\Show.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
+    <Content Include="Views\Shared\ButtonType.cshtml" />
+    <Content Include="Views\Users\MyPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -287,6 +290,7 @@
     <Folder Include="Views\FriendRequests\" />
     <Folder Include="Views\PostLikes\" />
     <Folder Include="Views\PostsLikedBy\" />
+    <Folder Include="Views\UserRelations\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

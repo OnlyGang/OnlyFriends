@@ -22,14 +22,24 @@ namespace OnlyFriends.Controllers
             return View();
         }
 
+        public ActionResult MyPage()
+        {
+            ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+            return View(user);
+        }
+        
         public ActionResult Show(string id)
         {
+            if (id == User.Identity.GetUserId())
+                return RedirectToAction("MyPage");
             ApplicationUser user = db.Users.Find(id);
             string currentRole = user.Roles.FirstOrDefault().RoleId;
             ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), User.IsInRole("Editor") || User.IsInRole("Admin"));
             var userRoleName = (from role in db.Roles
                                 where role.Id == currentRole
                                 select role.Name).First();
+
+            ViewBag.Relation = db.UserRelations.Find(User.Identity.GetUserId(), id);
 
             ViewBag.RoleName = userRoleName;
             ViewBag.IsFriendRequestSent = (db.FriendRequests.Find(User.Identity.GetUserId(), id) != null);
