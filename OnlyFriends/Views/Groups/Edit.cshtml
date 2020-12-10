@@ -22,8 +22,12 @@
     @Html.TextArea("Description", new { @class = "form-control" })
     @Html.ValidationMessage("Description", null, new { @class = "text-danger" })
     <br />
+    @Html.Label("IsPrivate", "Make private:");
+    @Html.CheckBox("IsPrivate", Model.IsPrivate);
+    <br />
     <br />
     @Html.HiddenFor(m => m.Date)
+
 
     <button class="btn btn-sm btn-success" type="submit">Edit group</button>
 

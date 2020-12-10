@@ -75,11 +75,32 @@ namespace OnlyFriends.Controllers
                 if (ModelState.IsValid)
                 {
                     UserRelation userrelation = db.UserRelations.Find(User1Id, User2Id);
-                    
-                    if (TryUpdateModel(userrelation))
+                    UserRelation userrelation2 = db.UserRelations.Find(User2Id, User1Id);
+
+                    if (TryUpdateModel(userrelation) /*&& TryUpdateModel(userrelation2)*/)
                     {
                         userrelation.Status = request.Status;
+
+                        switch (userrelation.Status)
+                        {
+                            case "Friend":
+                                userrelation2.Status = "Friend";
+                                break;
+                            case "Follows":
+                                if (userrelation2.Status == "Follows")
+                                {
+                                    userrelation.Status = userrelation2.Status = "Friend";
+                                    break;
+                                }
+                                userrelation2.Status = "IsFollowed";
+                                break;
+                            case "Blocked":
+                                userrelation2.Status = "IsBlocked";
+                                break;
+                        }
+
                         userrelation.Date = DateTime.Now;
+                        userrelation2.Date = DateTime.Now;
                         db.SaveChanges();
                         TempData["message"] = "The status has been successfully changed!";
                         return RedirectToAction("Show", "Users", new { id = User2Id });
@@ -97,7 +118,7 @@ namespace OnlyFriends.Controllers
             }
             catch (Exception e)
             {
-                TempData["ErrorMsg"] = "Error boss!";
+                TempData["ErrorMsg"] = e.Message;
                 return RedirectToAction("Index", "Users");
             }
 
@@ -112,7 +133,8 @@ namespace OnlyFriends.Controllers
             db.UserRelations.Remove(ToDelete1);
             db.UserRelations.Remove(ToDelete2);
             db.SaveChanges();
-            return RedirectToAction("Show", "Users", new { id = User2Id });
+            // return RedirectToAction("Show", "Users", new { id = User2Id });
+            return RedirectToAction((string) TempData["action"], (string) TempData["controller"], new { id = (string) TempData["id"] });
         }
     }
 }

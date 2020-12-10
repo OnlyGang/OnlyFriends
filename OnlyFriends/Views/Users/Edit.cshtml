@@ -23,8 +23,9 @@
         <br />
         @Html.EditorFor(m => m.PhoneNumber)
         <br />
-        <br />
-
+        @Html.Label("IsPrivate", "Make private:");
+        @Html.CheckBox("IsPrivate", Model.IsPrivate);
+    <br />
         @Html.Hidden("newRole", (string)ViewBag.userRole);
     }
 
@@ -33,6 +34,7 @@
         @Html.HiddenFor(m => m.UserName)
         @Html.HiddenFor(m => m.Email)
         @Html.HiddenFor(m => m.PhoneNumber)
+        @Html.HiddenFor(m => m.IsPrivate)
         <i class="glyphicon glyphicon-th-list"></i>
         @Html.Label("newRole", "Selectati rolul")
         @Html.DropDownList("newRole", new SelectList(Model.AllRoles, "Value", "Text", ViewBag.userRole), null, new { @class = "form-control" })

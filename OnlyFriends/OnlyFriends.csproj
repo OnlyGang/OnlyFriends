@@ -283,11 +283,11 @@
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Shared\ButtonType.cshtml" />
     <Content Include="Views\Users\MyPage.cshtml" />
+    <Content Include="Views\FriendRequests\Show.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\CommentLikes\" />
-    <Folder Include="Views\FriendRequests\" />
     <Folder Include="Views\PostLikes\" />
     <Folder Include="Views\PostsLikedBy\" />
     <Folder Include="Views\UserRelations\" />

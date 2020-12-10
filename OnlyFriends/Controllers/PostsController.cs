@@ -29,17 +29,17 @@ namespace OnlyFriends.Controllers
 
             return View();
         }
+
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Show(int id)
         {
             Post post = db.Posts.Find(id);
             ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), post.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
             ViewBag.IsLikedByCurrentUser = db.PostLikes.Find(id, User.Identity.GetUserId()) != null;
-           // ViewBag.IsF
+           
             return View(post);
 
         }
-
 
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult New()
@@ -65,12 +65,13 @@ namespace OnlyFriends.Controllers
                     db.Posts.Add(post);
                     db.SaveChanges();
                     TempData["message"] = "Postarea a fost adaugata!";
-                    if(post.GroupId != null)
+                    /*if (post.GroupId != null)
                     {
                         return RedirectToAction("Show", "Groups", new { id = post.GroupId });
                         // return Redirect($"/Groups/Show/{post.GroupId}");
                     }
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index")*/
+                    return RedirectToAction((string)TempData["action"], (string)TempData["controller"], new { id = TempData["id"] });                    
                 }
                 else
                 {

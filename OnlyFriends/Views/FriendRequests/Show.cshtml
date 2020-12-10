@@ -1,0 +1,56 @@
+﻿@model OnlyFriends.Models.ApplicationUser
+@{
+    ViewBag.Title = "Show";
+}
+
+<a class="btn btn-success " href="/Users/Show/@Model.Id" >Go back to your page</a>
+<h2>Friend Requests</h2>
+
+@{
+    TempData["action"] = "Show";
+    TempData["controller"] = "FriendRequests";
+    TempData["id"] = (string)Model.Id;
+}
+
+@foreach (var req in Model.ReceivedFriendRequests)
+{
+    <div>
+        <div style="float: left; margin-right:20px;">
+            @req.Sender.UserName
+        </div>
+        <div style="float: left; margin-right: 20px;">
+            @using (Html.BeginForm(actionName: "Delete", controllerName: "FriendRequests", method: FormMethod.Post, routeValues: new { SenderId = req.SenderId, RecieverId = req.RecieverId }))
+            {
+                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                <button class="glyphicon glyphicon-trash" style="border: none; background: transparent; " type="submit"></button>
+            }
+        </div>
+        <div style="float: left; margin-right: 20px;">
+            @using (Html.BeginForm(actionName: "Accept", controllerName: "FriendRequests", method: FormMethod.Post, routeValues: new { SenderId = req.SenderId, RecieverId = req.RecieverId }))
+            {
+                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                <button class="glyphicon glyphicon-check" style="border: none; background: transparent;" type="submit"></button>
+            }
+        </div>
+    </div>
+    <br />
+}
+
+<h2>Sent Friend Requests</h2>
+
+@foreach (var req in Model.SentFriendRequests)
+{
+    <div>
+        <div style="float: left; margin-right:20px;">
+            @req.Sender.UserName
+        </div>
+        <div style="float: left; margin-right:20px;">
+            @using (Html.BeginForm(actionName: "Delete", controllerName: "FriendRequests", method: FormMethod.Post, routeValues: new { SenderId = req.SenderId, RecieverId = req.RecieverId }))
+            {
+                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                <button class="glyphicon glyphicon-trash" style="border: none; background: transparent; " type="submit"></button>
+            }
+        </div>
+    </div>
+    <br />
+}

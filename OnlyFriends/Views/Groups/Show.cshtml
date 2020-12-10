@@ -75,6 +75,11 @@ else
             @Html.TextArea("Content", "", new { @class = "form-control" })
             @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
             <br />
+            @{ 
+                TempData["action"] = "Show";
+                TempData["controller"] = "Groups";
+                TempData["id"] = (int) Model.GroupId;
+            }
             <button class="btn btn-success " type="submit">Add Post</button>
         </div>
     }

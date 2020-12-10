@@ -1,4 +1,10 @@
 ﻿
+@{
+    TempData["action"] = "Show";
+    TempData["controller"] = "Users";
+    TempData["id"] = (string)(@ViewData["User2Id"]);
+}
+
 @switch (@ViewData["Method"])
 {
     case "New":
@@ -28,7 +34,7 @@
         }
     case "Delete":
         {
-            using (Html.BeginForm(actionName: "Delete", controllerName: "UserRelations", method: FormMethod.Post, routeValues: new { User1Id = ViewData["User1Id"], User2Id = ViewData["User2Id"]}))
+            using (Html.BeginForm(actionName: "Delete", controllerName: "UserRelations", method: FormMethod.Post, routeValues: new { User1Id = ViewData["User1Id"], User2Id = ViewData["User2Id"] }))
             {
                 @Html.HttpMethodOverride(HttpVerbs.Delete)
                 <button type="submit" class='btn btn-danger'> @ViewData["Type"] </button>

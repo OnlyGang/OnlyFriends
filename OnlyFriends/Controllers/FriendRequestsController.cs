@@ -1,4 +1,5 @@
-﻿using OnlyFriends.Models;
+﻿using Microsoft.AspNet.Identity;
+using OnlyFriends.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,8 +58,6 @@ namespace OnlyFriends.Controllers
             if (req != null)
             {
                 URC.Edit(req);
-                return RedirectToAction("Show", "Users", new { id = RecieverId });
-                //return RedirectToAction("Edit", "UsersRelations", new { request = req });
             }
             else
             {
@@ -67,9 +66,8 @@ namespace OnlyFriends.Controllers
                 newRel.User2Id = RecieverId;
                 newRel.Status = "Friend";
                 URC.New(newRel);
-                return RedirectToAction("Show", "Users", new { id = RecieverId });
-                //return RedirectToAction("New", "UsersRelations", new { userrelation = newRel });
             }
+            return RedirectToAction((string)TempData["action"], (string)TempData["controller"], new { id = TempData["id"] });
         }
         
 
@@ -80,7 +78,15 @@ namespace OnlyFriends.Controllers
             FriendRequest ToDelete = db.FriendRequests.Find(SenderId, RecieverId);
             db.FriendRequests.Remove(ToDelete);
             db.SaveChanges();
-            return RedirectToAction("Show", "Users", new { id = RecieverId });
+            return RedirectToAction((string)TempData["action"], (string)TempData["controller"], new { id = TempData["id"] });
+        }
+
+
+        public ActionResult Show(string id)
+        {
+            var user = db.Users.Find(id);
+            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), user.Id == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
+            return View(user);
         }
     }
 }

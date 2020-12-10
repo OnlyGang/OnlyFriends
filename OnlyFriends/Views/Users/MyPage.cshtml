@@ -16,28 +16,78 @@
     }
 </div>
 
-@foreach (var req in Model.ReceivedFriendRequests)
+@using (Html.BeginForm(actionName: "New", controllerName: "Posts"))
 {
-    <p>
-        @req.Sender.UserName
-        @using (Html.BeginForm(actionName: "Delete", controllerName: "FriendRequests", method: FormMethod.Post, routeValues: new { SenderId = req.SenderId, RecieverId = req.RecieverId }))
-        {
-            @Html.HttpMethodOverride(HttpVerbs.Delete)
-            <button class="glyphicon glyphicon-trash" style="border: none; background: transparent;" type="submit"></button>
+
+    <div class="panel-body">
+        @Html.Hidden("GroupId", null)
+        @Html.Label("Title", "Title")
+        <br />
+        @Html.TextBox("Title", "", new { @class = "form-control" })
+        @Html.ValidationMessage("Title", null, new { @class = "text-danger" })
+        <br />
+        @Html.Label("Content", "Content")
+        <br />
+        @Html.TextArea("Content", "", new { @class = "form-control" })
+        @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
+        <br />
+        @{
+            TempData["action"] = "Show";
+            TempData["controller"] = "Users";
+            TempData["id"] = (string)Model.Id;
         }
-        @using (Html.BeginForm(actionName: "Accept", controllerName: "FriendRequests", method: FormMethod.Post, routeValues: new { SenderId = req.SenderId, RecieverId = req.RecieverId }))
-        {
-            @Html.HttpMethodOverride(HttpVerbs.Delete)
-            <button class="glyphicon glyphicon-check" style="border: none; background: transparent;" type="submit"></button>
-        }
-    </p>
+        <button class="btn btn-success " type="submit">Add Post on your Feed</button>
+    </div>
 }
 
+<!-- Show friends, follower number -->
 <hr />
-@foreach (var friend in Model.MyUserRetations)
+<h3>My friends:</h3>
+@foreach (var friend in Model.MyUserRelations.Where(ur => ur.Status == "Friend"))
 {
-    <p>
-        @friend.User2.UserName
-        
-    </p>
+    @*Html.ActionLink(friend.User2.UserName, actionName: "Show", controllerName: "Users" , routeValues: new { id = (string)friend.User2Id })*@
+    <div style="float: left; margin-right:20px;">
+        @Html.ActionLink(friend.User2.UserName, "Show/" + friend.User2Id)
+    </div>
+    <div style="float: left; margin-right:20px;">
+        @using (Html.BeginForm(actionName: "Delete", controllerName: "UserRelations", method: FormMethod.Post, routeValues: new { User1Id = friend.User1Id, User2Id = friend.User2Id }))
+        {
+            @Html.HttpMethodOverride(HttpVerbs.Delete)
+            
+            TempData["action"] = "Show";
+            TempData["controller"] = "Users";
+            TempData["id"] = (string)Model.Id;
+            
+            <button class="glyphicon glyphicon-trash" style="border: none; background: transparent; " type="submit"></button>
+        }
+    </div>
+    <br />
+}
+
+@if (!Model.IsPrivate)
+{
+    <hr />
+    <h3>Followers: @Model.MyUserRelations.Where(ur => ur.Status == "IsFollowed").Count()</h3>
+}
+<hr />
+
+<!-- go to requests-->
+
+<a class="btn btn-primary" href="/FriendRequests/Show/@Model.Id">Requests</a>
+
+<!-- Show my posts -->
+@foreach (var post in Model.Posts.OrderByDescending(m => m.Date))
+{
+    if (post.GroupId == null)
+    {
+        <div class="panel panel-default">
+
+            @Html.Partial("PostInfo", post)
+
+            <div class="panel-footer">
+                <a class=" btn btn-sm btn btn-success" href="/Posts/Show/@post.PostId">View post</a>
+            </div>
+
+        </div>
+    }
 }

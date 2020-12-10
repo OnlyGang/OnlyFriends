@@ -39,7 +39,7 @@ namespace OnlyFriends.Models
         public virtual ICollection<FriendRequest> ReceivedFriendRequests { get; set; }
 
         // Asta e pentru User Relations (Many-to-Many pe acelasi tabel)
-        public virtual ICollection<UserRelation> MyUserRetations { get; set; }
+        public virtual ICollection<UserRelation> MyUserRelations { get; set; }
         public virtual ICollection<UserRelation> OthersUserRelations { get; set; }
     }
 
@@ -96,7 +96,7 @@ namespace OnlyFriends.Models
 
             modelBuilder.Entity<UserRelation>()
                 .HasRequired(pt => pt.User1)
-                .WithMany(p => p.MyUserRetations)
+                .WithMany(p => p.MyUserRelations)
                 .HasForeignKey(pt => pt.User1Id)
                 .WillCascadeOnDelete(false);
 

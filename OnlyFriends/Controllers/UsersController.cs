@@ -19,6 +19,7 @@ namespace OnlyFriends.Controllers
                         orderby user.UserName
                         select user;
             ViewBag.UsersList = users;
+            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), User.IsInRole("Editor") || User.IsInRole("Admin"));
             return View();
         }
 
@@ -30,6 +31,7 @@ namespace OnlyFriends.Controllers
         
         public ActionResult Show(string id)
         {
+            System.Diagnostics.Debug.WriteLine((id == null ? "null" : id));
             if (id == User.Identity.GetUserId())
                 return RedirectToAction("MyPage");
             ApplicationUser user = db.Users.Find(id);
@@ -91,6 +93,7 @@ namespace OnlyFriends.Controllers
                     user.UserName = newData.UserName;
                     user.Email = newData.Email;
                     user.PhoneNumber = newData.PhoneNumber;
+                    user.IsPrivate = newData.IsPrivate;
                     var roles = from role in db.Roles select role;
                     foreach (var role in roles)
                     {
