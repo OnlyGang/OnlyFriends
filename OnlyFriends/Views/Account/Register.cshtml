@@ -2,40 +2,34 @@
 @{
     ViewBag.Title = "Register";
 }
-
-<h2>@ViewBag.Title.</h2>
-
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    @Html.AntiForgeryToken()
-    <h4>Create a new account.</h4>
-    <hr />
-    @Html.ValidationSummary("", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-        </div>
+<div class="row" style="margin-top: 10%">
+    <div class="col-md-8" style="margin-top: 10%">
+        <img src="~/Content/Images/Register.svg" width=80% style="margin: 0 auto; " />
     </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-        </div>
+    <div class="col-md-4 logres-div" style="margin-top: 3%">
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "logres-form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary("", new { @class = "text-alert" })
+            <h1 class="logres-form-title">Sign Up</h1>
+            <div class="logres-form-div">    
+                @Html.TextBoxFor(m => m.Email, new { @placeholder=" ", @class = "logres-form-input" })
+                @Html.LabelFor(m => m.Email, new { @class = "logres-form-label" })
+            </div>
+            <div class="logres-form-div">
+                @Html.PasswordFor(m => m.Password, new { @placeholder=" ", @class = "logres-form-input" })
+                @Html.LabelFor(m => m.Password, new { @class = "logres-form-label" })
+            </div>
+            <div class="logres-form-div">
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @placeholder=" ", @class = "logres-form-input" })
+                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "logres-form-label" })
+            </div>
+            <input type="submit" class="logres-form-button" value="Register" />
+        }
     </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Register" />
-        </div>
-    </div>
-}
+</div>
 
 @section Scripts {
+    <link href="~/Content/LoginRegister.css" rel="stylesheet" /> 
     @Scripts.Render("~/bundles/jqueryval")
 }

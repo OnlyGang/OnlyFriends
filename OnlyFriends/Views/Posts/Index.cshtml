@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
 <h1>@ViewBag.Message</h1>
@@ -11,16 +10,16 @@
 
 @foreach (OnlyFriends.Models.Post post in ViewBag.Posts)
 {
-    <div class="panel panel-default">
+    <div class="card" style="margin-top: 1em">
+        <div class="card-body">
+            @Html.Partial("PostInfo", post)
 
-        @Html.Partial("PostInfo", post)
-
-        <div class="panel-footer">
-            <a class=" btn btn-sm btn btn-success" href="/Posts/Show/@post.PostId">View post</a>
+            <div class="panel-footer">
+                <a class=" btn btn-success btn-lg btn-block" href="/Posts/Show/@post.PostId">View post</a>
+            </div>
         </div>
-
     </div>
-}
+    }
 
 
 

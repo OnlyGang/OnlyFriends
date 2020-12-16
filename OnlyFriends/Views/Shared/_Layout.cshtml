@@ -3,39 +3,33 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap" rel="stylesheet">
     @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/bootstrap-social.css")
     @Scripts.Render("~/bundles/modernizr")
+    @*@Styles.Render("~/Content/fontawesome")*@
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("OnlyFriends", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Posts", "Index", "Posts")</li>
-                    <li>@Html.ActionLink("Groups", "Index", "Groups")</li>
-                    <li>@Html.ActionLink("Users", "Index", "Users")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
-        </div>
-    </div>
+    <nav class="navbar navbar-expand-lg" style="border-bottom: 2px solid rgba(138,150,163,.25); box-shadow: 0 0 2px rgba(0,0,0,.16);">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a href="@Url.Action("Index", "Home")" title="Home" class="nav-link"><img width="150em" alt="Logo" src="@Url.Content("~/Content/Images/Logo.png")" class="nav-link" /></a></li>
+            <li class="nav-item"><a href="@Url.Action("Index", "Posts")" title="Posts" class="nav-link"><img width="50em"  alt="Posts" src="@Url.Content("~/Content/Images/Posts.svg")" class="nav-link"/></a></li>
+            <li class="nav-item"><a href="@Url.Action("Index", "Groups")" title="Groups" class="nav-link"><img width="50em" alt="Groups" src="@Url.Content("~/Content/Images/Groups.svg")" class="nav-link" /></a></li>
+            <li class="nav-item"><a href="@Url.Action("Index", "Users")" title="Users" class="nav-link"><img width="50em" alt="Users" src="@Url.Content("~/Content/Images/Users.svg")" class="nav-link" /></a></li>
+        </ul>
+         @Html.Partial("_LoginPartial")
+    </nav>
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
     </div>
+    
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

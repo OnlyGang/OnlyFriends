@@ -1,6 +1,7 @@
 ﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+    padding: 0;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -21,4 +22,10 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+h6 {
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 20px;
 }

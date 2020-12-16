@@ -25,7 +25,7 @@
         <br />
         @Html.Label("IsPrivate", "Make private:");
         @Html.CheckBox("IsPrivate", Model.IsPrivate);
-    <br />
+        <br />
         @Html.Hidden("newRole", (string)ViewBag.userRole);
     }
 
@@ -39,6 +39,7 @@
         @Html.Label("newRole", "Selectati rolul")
         @Html.DropDownList("newRole", new SelectList(Model.AllRoles, "Value", "Text", ViewBag.userRole), null, new { @class = "form-control" })
         <br />
+        <button class="btn btn-sm btn-success" type="submit">Edit</button>
     }
-    <button class="btn btn-sm btn-success" type="submit">Edit</button>
+
 }

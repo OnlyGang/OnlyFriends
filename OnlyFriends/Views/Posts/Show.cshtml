@@ -5,59 +5,72 @@
 }
 
 <br />
-@if (Model.GroupId != null) {
+@if (Model.GroupId != null)
+{
     @Html.ActionLink("Back to Group", "Show", "Groups", new { id = Model.GroupId }, new { @class = "btn btn-info block" });
 }
 @Html.ActionLink("Back to posts", "Index", new { controller = "Posts" }, new { @class = "btn btn-warning block" })
 <br />
 
 
-<div class="panel panel-default">
+<div class="card" >
+    <div class="card-body">
+        @Html.Partial("PostInfo", Model)
 
-    @Html.Partial("PostInfo", Model)
-    @if (ViewBag.CurrentUser.Item2)
-    {
-        <div class="panel-footer">
-
-            <a class="btn btn-success pull-left" href="/Posts/Edit/@Model.PostId">Edit post</a>
-            @using (Html.BeginForm(actionName: "Delete", controllerName: "Posts", method: FormMethod.Post, routeValues: new { id = Model.PostId }))
+    </div>
+    <div class="row">
+        <div class="col-md-4" style="text-align:center">
+            <!--Like section-->
+            @if (!ViewBag.IsLikedByCurrentUser)
             {
-                @Html.HttpMethodOverride(HttpVerbs.Delete)
-                <button class="btn btn-danger pull-right" type="submit">Delete post</button>
+                using (Html.BeginForm(actionName: "New", controllerName: "PostLikes", method: FormMethod.Post))
+                {
+                    @Html.Hidden("PostId", Model.PostId)
+                    @Html.Hidden("UserId", (string)ViewBag.CurrentUser.Item1)
+                    <button type="submit" class="btn btn-outline-primary"><i class="fa fa-thumbs-up"></i> Like  <span class="badge badge-light"> @Model.LikeCount </span> </button>
+                    @*<span>@Model.LikeCount</span>*@
+                }
             }
-
-            <div class="clearfix"></div>
+            else
+            {
+                using (Html.BeginForm(actionName: "Delete", controllerName: "PostLikes", method: FormMethod.Post, routeValues: new { PostId = Model.PostId, UserId = (string)ViewBag.CurrentUser.Item1 }))
+                {
+                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-thumbs-up"></i>  Like  <span class="badge badge-light"> @Model.LikeCount </span> </button>
+                    @*<span style="margin-bottom: 0">@Model.LikeCount</span>*@
+                }
+            }
         </div>
-    }
-
-    <!--Like section-->
-    @if (!ViewBag.IsLikedByCurrentUser)
-    {
-        using (Html.BeginForm(actionName: "New", controllerName: "PostLikes", method: FormMethod.Post))
+        @if (ViewBag.CurrentUser.Item2)
         {
-            @Html.Hidden("PostId", Model.PostId)
-            @Html.Hidden("UserId", (string)ViewBag.CurrentUser.Item1)
-            <button type="submit"><span class='glyphicon glyphicon-thumbs-up'></span> Like </button>
-            <span>@Model.LikeCount</span>
-        }
-    }
-    else
-    {
-        using (Html.BeginForm(actionName: "Delete", controllerName: "PostLikes", method: FormMethod.Post, routeValues: new { PostId = Model.PostId, UserId = (string)ViewBag.CurrentUser.Item1 }))
-        {
-            @Html.HttpMethodOverride(HttpVerbs.Delete)
-            <button type="submit" style="color: blue"><span class='glyphicon glyphicon-thumbs-up'></span> Like </button>
-            <span>@Model.LikeCount</span>
-        }
-    }
 
+            <div class="col-md-4" style="text-align:center">
+                <a href="/Posts/Edit/@Model.PostId" class="btn btn-outline-dark"><i class="fa fa-pencil"></i>  Edit post</a>
+            </div>
+            <div class="col-md-4" style="text-align:center">
+                @using (Html.BeginForm(actionName: "Delete", controllerName: "Posts", method: FormMethod.Post, routeValues: new { id = Model.PostId }))
+                {
+                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                    <button type="submit" class="btn btn-outline-danger"><i class="fa fa-trash"></i>  Delete post</button>
+                }
+            </div>
+            <div class="clearfix"></div>
+
+        }
+        else
+        {
+            <div class="col-md-4"></div>
+            <div class="col-md-4"></div>
+        }
+
+    </div>
     @if (Model.LikeCount > 0)
     {
         <div>
             <span style="display: inline-block; font-weight: bold; font-size: 90%">Liked By:</span>
             @foreach (var pl in Model.PostLikes)
             {
-                <span style="display: inline-block; font-size: 90%">@pl.User.Email</span>
+                <span style="display: inline-block; font-size: 90%">@pl.User.UserName</span>
             }
         </div>
     }
@@ -66,39 +79,47 @@
 <!--This is the comments section-->
 <br />
 
+<div class="row">
+
+    <div class="col-md-8">
+
+        @using (Html.BeginForm(actionName: "New", controllerName: "Comments"))
+        {
+            <div class="card my-4">
+                @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
+
+                @Html.Hidden("PostId", Model.PostId)
+                @Html.Label("Content", "Enter your comment", new { @class = "card-header" })
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            @Html.TextArea("Content", "", new { @class = "form-control form-control-lg", @style = "resize: none; width: 80%" })
+                        </div>
+                        <div class="col-md-4">
+                            @*@Html.ValidationMessage("Content", "Mesaj", new { @class = "text-danger" })*@
+                            <button class="btn btn-success pull-right" type="submit">Add comment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <br />
+        <br />
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-2">
+    </div>
+</div>
+
 @foreach (var comm in Model.Comments)
 {
     @Html.Partial("CommentInfo", comm);
 }
 
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-8">
-            <div class="panel">
-                @using (Html.BeginForm(actionName: "New", controllerName: "Comments"))
-                {
-                    <div class="panel-body">
-                        @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
-
-                        @Html.Hidden("PostId", Model.PostId)
-                        @Html.Label("Content", "Enter your comment")
-                        <br />
-                        @Html.TextArea("Content", "", new { @class = "form-control" })
-                        @*@Html.ValidationMessage("Content", "Mesaj", new { @class = "text-danger" })*@
-                        <br />
-                        <button class="btn btn-success " type="submit">Add comment</button>
-                    </div>
-                }
-                <br />
-                <br />
-            </div>
-        </div>
-        <div class="col-md-2"></div>
-    </div>
-</div>
+@section Scripts {
+    <link href="~/Content/LoginRegister.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/jqueryval")
+}
 
 
 

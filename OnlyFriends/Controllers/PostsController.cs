@@ -18,8 +18,17 @@ namespace OnlyFriends.Controllers
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Index()
         {
+            string CurrUserId = User.Identity.GetUserId();
+            var myGroups = (from gr in db.GroupMembers
+                           where gr.UserId == CurrUserId
+                           select gr.GroupId).ToList();
 
-            var posts = db.Posts.Include("User");
+            var myFriends = (from fr in db.UserRelations
+                            where fr.User1Id == CurrUserId && (fr.Status == "Friend" || fr.Status == "Follows")
+                            select fr.User2Id).ToList();
+
+            
+            var posts = db.Posts.Where(u => (u.UserId == CurrUserId || (u.GroupId != null && myGroups.Contains((int)u.GroupId)) || (u.GroupId == null && myFriends.Contains(u.UserId)))).OrderByDescending(a => a.Date).Include("User");
             ViewBag.Posts = posts;
             
             if (TempData.ContainsKey("message"))

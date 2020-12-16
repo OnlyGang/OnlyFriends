@@ -1,63 +1,57 @@
 ﻿@using OnlyFriends.Models
 @model LoginViewModel
+
 @{
-    ViewBag.Title = "Log in";
+    ViewBag.Title = "Log In";
 }
 
-<h2>@ViewBag.Title.</h2>
-<div class="row">
-    <div class="col-md-8">
+<div class="row" style="margin-top: 10%">
+    <div class="col-md-8" style="margin-top: 10%">
+        <img src="~/Content/Images/LoginImage.svg" width=80% style="margin: 0 auto; " />
+    </div>
+    <div class="col-md-4 logres-form">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <img src="~/Content/Images/Logo.png" width="80%" style="margin: 0 auto; " />
+            <h6 style="margin: 0 auto;">Sign up to interact with your friends!</h6">
+        </div>
+        <section id="socialLoginForm">
+            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+        </section>
+        <hr />
         <section id="loginForm">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form" }))
             {
                 @Html.AntiForgeryToken()
-                <h4>Use a local account to log in.</h4>
-                <hr />
+                
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                <div class="logres-form-div">
+                    @Html.TextBoxFor(m => m.Email, new { @placeholder=" ", @class = "logres-form-input" })
+                    @Html.LabelFor(m => m.Email, new { @class = "logres-form-label" })
+                </div>
+                <div class="logres-form-div">
+                    @Html.PasswordFor(m => m.Password, new { @placeholder=" ", @class = "logres-form-input" })
+                    @Html.LabelFor(m => m.Password, new { @class = "logres-form-label" })
+                </div>
+                <div class="logres-form-div">
+                    <div class="checkbox">
+                        @Html.CheckBoxFor(m => m.RememberMe)
+                        @Html.LabelFor(m => m.RememberMe)
                     </div>
                 </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(m => m.RememberMe)
-                            @Html.LabelFor(m => m.RememberMe)
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Log in" class="btn btn-default" />
-                    </div>
-                </div>
-                <p>
+                <input type="submit" value="Log in" class="logres-form-button" />
+                <p class="logres-form-paragraph">
                     @Html.ActionLink("Register as a new user", "Register")
                 </p>
                 @* Enable this once you have account confirmation enabled for password reset functionality
-                    <p>
-                        @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                    </p>*@
+            <p>
+                @Html.ActionLink("Forgot your password?", "ForgotPassword")
+            </p>*@
             }
-        </section>
-    </div>
-    <div class="col-md-4">
-        <section id="socialLoginForm">
-            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
         </section>
     </div>
 </div>
 
 @section Scripts {
+    <link href="~/Content/LoginRegister.css" rel="stylesheet" /> 
     @Scripts.Render("~/bundles/jqueryval")
 }

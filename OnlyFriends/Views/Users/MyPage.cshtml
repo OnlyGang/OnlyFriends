@@ -80,14 +80,15 @@
 {
     if (post.GroupId == null)
     {
-        <div class="panel panel-default">
-
+    <div class="card" style="margin-top: 1em">
+        <div class="card-body">
             @Html.Partial("PostInfo", post)
 
             <div class="panel-footer">
-                <a class=" btn btn-sm btn btn-success" href="/Posts/Show/@post.PostId">View post</a>
+                <a class=" btn btn-success btn-lg btn-block" href="/Posts/Show/@post.PostId">View post</a>
             </div>
-
         </div>
+    </div>
+    
     }
 }

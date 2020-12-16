@@ -1,8 +1,6 @@
 ﻿@model OnlyFriends.Models.ExternalLoginListViewModel
 @using Microsoft.Owin.Security
 
-<h4>Use another service to log in.</h4>
-<hr />
 @{
     var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
     if (loginProviders.Count() == 0) {
@@ -19,7 +17,19 @@
             <div id="socialLoginList">
                 <p>
                     @foreach (AuthenticationDescription p in loginProviders) {
-                        <button type="submit" class="btn btn-info" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
+                        var className = "";
+                        var icon = "";
+                        switch (p.AuthenticationType) {
+                            case "Facebook":
+                                className = "btn btn-block btn-social btn-facebook";
+                                icon = "fa fa-facebook";
+                                break;
+                            case "Google":
+                                className = "btn btn-block btn-social btn-google";
+                                icon = "fa fa-google";
+                                break;
+                        }
+                        <button type="submit" class="@className" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account"><i class="@icon"></i>@p.AuthenticationType</button>
                     }
                 </p>
             </div>
