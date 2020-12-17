@@ -1,16 +1,12 @@
-﻿
-<h1 class="mt-4">@Model.Title</h1>
+﻿<h1 class="mt-4">@Model.Title</h1>
 <p class="lead">
-    <a href="/Users/Show/@Model.User.Id"> <i class="fa fa-user"></i> @Model.User.UserName</a>
+    <a href="/Users/Show/@Model.User.Id"><i class="fa fa-user"></i>  by @Model.User.UserName</a>
 </p>
 <span>@Model.User.Email</span>
 <p class="lead">
-
     <div class="card-text" style="text-align : center">@Model.Content</div>
     <br />
-    <span class="label label-success">@Model.Date</span>
+    <span class="label label-success show-date">@Model.Date</span>
     <br />
-    <hr/>
-
-</p>
-
+    <hr />
+</p> 
