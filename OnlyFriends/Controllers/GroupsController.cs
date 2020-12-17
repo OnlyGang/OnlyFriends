@@ -16,6 +16,23 @@ namespace OnlyFriends.Controllers
         public ActionResult Index()
         {
             var groups = db.Groups.Include("User").OrderByDescending(a => a.Date);
+
+            // Search 
+            var search = "";
+            if (Request.Params.Get("search") != null)
+            {
+                search = Request.Params.Get("search").Trim();
+
+                // Search through titles and contents of a post
+                List<int> groupIds = db.Groups.Where(
+                    group => group.Title.Contains(search)
+                    || group.Description.Contains(search)
+                    ).Select(g => g.GroupId).ToList();
+
+                groups = groups.Where(group => groupIds.Contains(group.GroupId)).OrderByDescending(g => g.Date);
+            }
+            
+            ViewBag.SearchString = search;
             ViewBag.Groups = groups;
             return View();
         }
@@ -73,9 +90,7 @@ namespace OnlyFriends.Controllers
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Edit(int id)
         {
-
             Group group = db.Groups.Find(id);
-            ViewBag.Group = group;
             if (group.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"))
             {
                 return View(group);

@@ -1,56 +1,95 @@
 ﻿@model OnlyFriends.Models.ApplicationUser
 @{
     ViewBag.Title = "Show";
+    ViewBag.BodyClass = "FriendRequest";
 }
 
 <a class="btn btn-success " href="/Users/Show/@Model.Id" >Go back to your page</a>
-<h2>Friend Requests</h2>
 
-@{
-    TempData["action"] = "Show";
-    TempData["controller"] = "FriendRequests";
-    TempData["id"] = (string)Model.Id;
-}
+<div class="row" style="margin:0">
+    <div class="col-md-4">
+        <div class="card" style="margin: 0">
+            <h3>Your relations</h3>
+            <hr />
 
-@foreach (var req in Model.ReceivedFriendRequests)
-{
-    <div>
-        <div style="float: left; margin-right:20px;">
-            @req.Sender.UserName
-        </div>
-        <div style="float: left; margin-right: 20px;">
-            @using (Html.BeginForm(actionName: "Delete", controllerName: "FriendRequests", method: FormMethod.Post, routeValues: new { SenderId = req.SenderId, RecieverId = req.RecieverId }))
+            @foreach (var rel in Model.MyUserRelations)
             {
-                @Html.HttpMethodOverride(HttpVerbs.Delete)
-                <button class="glyphicon glyphicon-trash" style="border: none; background: transparent; " type="submit"></button>
-            }
-        </div>
-        <div style="float: left; margin-right: 20px;">
-            @using (Html.BeginForm(actionName: "Accept", controllerName: "FriendRequests", method: FormMethod.Post, routeValues: new { SenderId = req.SenderId, RecieverId = req.RecieverId }))
-            {
-                @Html.HttpMethodOverride(HttpVerbs.Delete)
-                <button class="glyphicon glyphicon-check" style="border: none; background: transparent;" type="submit"></button>
-            }
-        </div>
-    </div>
-    <br />
-}
+                
+        
+                <div class="row">
+                    <strong class="col-md-10">@Html.ActionLink(rel.User2.UserName, "Show/" + rel.User2Id) <span>- @rel.Status</span></strong>
+                    <div class="col-md-2">
+                        @using (Html.BeginForm(actionName: "Delete", controllerName: "UserRelations", method: FormMethod.Post, routeValues: new { User1Id = rel.User1Id, User2Id = rel.User2Id }))
+                        {
+                            @Html.HttpMethodOverride(HttpVerbs.Delete)
 
-<h2>Sent Friend Requests</h2>
+                            TempData["action"] = "Show";
+                            TempData["controller"] = "Users";
+                            TempData["id"] = (string)Model.Id;
 
-@foreach (var req in Model.SentFriendRequests)
-{
-    <div>
-        <div style="float: left; margin-right:20px;">
-            @req.Sender.UserName
-        </div>
-        <div style="float: left; margin-right:20px;">
-            @using (Html.BeginForm(actionName: "Delete", controllerName: "FriendRequests", method: FormMethod.Post, routeValues: new { SenderId = req.SenderId, RecieverId = req.RecieverId }))
-            {
-                @Html.HttpMethodOverride(HttpVerbs.Delete)
-                <button class="glyphicon glyphicon-trash" style="border: none; background: transparent; " type="submit"></button>
+                            <button class="fa fa-trash pull-right " style="border: none; background: transparent; " type="submit"></button>
+                        }
+                    </div>
+                </div>
+                <br />
             }
         </div>
     </div>
-    <br />
-}
+    <div class="col-md-4">
+        <div class="card" style="margin: 0">
+            <h3>Recieved Requests</h3>
+            <hr />
+
+            @foreach (var req in Model.ReceivedFriendRequests)
+            {
+
+
+                <div class="row">
+                    <strong class="col-md-8">@Html.ActionLink(req.Sender.UserName, "Show/" + req.Sender.Id) <span class="show-date">@req.Date.ToString("dd/MM/yyyy HH:mm:ss")</span></strong>
+                    <div class="col-md-4 pull-right">
+                        <div>
+                            @using (Html.BeginForm(actionName: "Delete", controllerName: "FriendRequests", method: FormMethod.Post, routeValues: new { SenderId = req.SenderId, RecieverId = req.RecieverId }))
+                            {
+                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                <button class="fa fa-trash pull-right" style="border: none; background: transparent; " type="submit"></button>
+                            }
+                        </div>
+                        <div>
+                            @using (Html.BeginForm(actionName: "Accept", controllerName: "FriendRequests", method: FormMethod.Post, routeValues: new { SenderId = req.SenderId, RecieverId = req.RecieverId }))
+                            {
+                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                <button class="fa fa-check pull-right" style="border: none; background: transparent;" type="submit"></button>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <br />
+            }
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card" style="margin: 0">
+            <h3>Sent Requests</h3>
+            <hr />
+            @foreach (var req in Model.SentFriendRequests)
+            {
+
+
+                <div class="row">
+                    <strong class="col-md-8">@Html.ActionLink(req.Reciever.UserName, "Show/" + req.Reciever.Id) <span class="show-date">@req.Date.ToString("dd/MM/yyyy HH:mm:ss")</span></strong>
+                    <div class="col-md-4">
+                        <div class="pull-right">
+                            @using (Html.BeginForm(actionName: "Delete", controllerName: "FriendRequests", method: FormMethod.Post, routeValues: new { SenderId = req.SenderId, RecieverId = req.RecieverId }))
+                            {
+                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                <button class="fa fa-trash" style="border: none; background: transparent; " type="submit"></button>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <br />
+            }
+
+        </div>
+    </div>
+</div>

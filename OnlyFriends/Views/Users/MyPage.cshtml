@@ -1,79 +1,79 @@
 ﻿@model OnlyFriends.Models.ApplicationUser
 @{
     ViewBag.Title = "MyPage";
+    var nrFollowers = Model.MyUserRelations.Where(ur => ur.Status == "IsFollowed").Count();
 }
 
-<h2>MyPage</h2>
 
-<div class="panel-heading">Username: @Model.UserName</div>
-<div class="panel-body">
-    <i class="glyphicon glyphicon-envelope"></i> Email: <span class="label label-default">@Model.Email</span>
-    <br />
-    <br />
-    @if (Model.PhoneNumber != null)
+
+<div class="row" style="margin: 20px;">
+
+    <div class="col-md-8">
+        <h2 style="font-weight:700;">Welcome back!</h2>
+        <div>
+            <br />
+            <h3><i class="fa fa-user"></i> <strong>Username: </strong><span class="label label-default">@Model.UserName</span></h3>
+
+            <br />
+            <i class="fa fa-envelope"></i> <strong>Email: </strong>  <span class="label label-default">@Model.Email</span>
+            <br />
+            <br />
+            @if (Model.PhoneNumber != null)
+            {
+                <i class="fa fa-phone"></i> <strong>PhoneNumber: </strong><span class="label label-default">@Model.PhoneNumber</span>
+            }
+        </div>
+        <br />
+        @if (nrFollowers != 0)
+        {
+            <i class="fa fa-users"></i> <strong>Followers: @nrFollowers</strong>
+            <br />
+            <br />
+        }
+        <a class="btn btn-warning" href="/Users/Edit/@Model.Id">Edit</a>
+        <!-- go to requests-->
+
+        <a class="btn btn-primary" href="/FriendRequests/Show/@Model.Id">Your Relations</a>
+
+    </div>
+    <div class="col-md-4">
+        <img src="~/Content/Images/MyPage.svg" style="width: 80%" />
+    </div>
+
+</div>
+
+
+<div class="card">
+    @using (Html.BeginForm(actionName: "New", controllerName: "Posts"))
     {
-        <i class="glyphicon glyphicon-phone"></i>@:PhoneNumber:<span class="label label-default">@Model.PhoneNumber</span>
+        <h2>Post something on your feed!</h2>
+        <div class="form">
+            <strong> @Html.Label("Title", "Title:")</strong>
+            <br />
+            @Html.TextBox("Title", "", new { @class = "form__input" })
+            @Html.ValidationMessage("Title", null, new { @class = "text-danger" })
+            <br />
+            <br />
+            <strong>@Html.Label("Content", "Post's Content:")</strong>
+            <br />
+            @Html.TextArea("Content", null, new { @class = "form__input" })
+            @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
+            <br />
+            @Html.Hidden("GroupId", null)
+            @{
+                TempData["action"] = "Show";
+                TempData["controller"] = "Users";
+                TempData["id"] = (string)Model.Id;
+            }
+            <button class="btn btn-success btn-lg btn-block" type="submit">Add Post on your Feed</button>
+            
+        </div>
     }
 </div>
 
-@using (Html.BeginForm(actionName: "New", controllerName: "Posts"))
-{
 
-    <div class="panel-body">
-        @Html.Hidden("GroupId", null)
-        @Html.Label("Title", "Title")
-        <br />
-        @Html.TextBox("Title", "", new { @class = "form-control" })
-        @Html.ValidationMessage("Title", null, new { @class = "text-danger" })
-        <br />
-        @Html.Label("Content", "Content")
-        <br />
-        @Html.TextArea("Content", "", new { @class = "form-control" })
-        @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
-        <br />
-        @{
-            TempData["action"] = "Show";
-            TempData["controller"] = "Users";
-            TempData["id"] = (string)Model.Id;
-        }
-        <button class="btn btn-success " type="submit">Add Post on your Feed</button>
-    </div>
-}
 
-<!-- Show friends, follower number -->
-<hr />
-<h3>My friends:</h3>
-@foreach (var friend in Model.MyUserRelations.Where(ur => ur.Status == "Friend"))
-{
-    @*Html.ActionLink(friend.User2.UserName, actionName: "Show", controllerName: "Users" , routeValues: new { id = (string)friend.User2Id })*@
-    <div style="float: left; margin-right:20px;">
-        @Html.ActionLink(friend.User2.UserName, "Show/" + friend.User2Id)
-    </div>
-    <div style="float: left; margin-right:20px;">
-        @using (Html.BeginForm(actionName: "Delete", controllerName: "UserRelations", method: FormMethod.Post, routeValues: new { User1Id = friend.User1Id, User2Id = friend.User2Id }))
-        {
-            @Html.HttpMethodOverride(HttpVerbs.Delete)
-            
-            TempData["action"] = "Show";
-            TempData["controller"] = "Users";
-            TempData["id"] = (string)Model.Id;
-            
-            <button class="glyphicon glyphicon-trash" style="border: none; background: transparent; " type="submit"></button>
-        }
-    </div>
-    <br />
-}
 
-@if (!Model.IsPrivate)
-{
-    <hr />
-    <h3>Followers: @Model.MyUserRelations.Where(ur => ur.Status == "IsFollowed").Count()</h3>
-}
-<hr />
-
-<!-- go to requests-->
-
-<a class="btn btn-primary" href="/FriendRequests/Show/@Model.Id">Requests</a>
 
 <!-- Show my posts -->
 @foreach (var post in Model.Posts.OrderByDescending(m => m.Date))

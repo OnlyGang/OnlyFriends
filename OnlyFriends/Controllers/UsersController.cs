@@ -12,12 +12,31 @@ namespace OnlyFriends.Controllers
     public class UsersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
         // GET: Users
         public ActionResult Index()
         {
-            var users = from user in db.Users
+            var users = db.Users.OrderBy(u => u.UserName);
+            /*var users = from user in db.Users
                         orderby user.UserName
-                        select user;
+                        select user;*/
+
+            // Search 
+            var search = "";
+            if (Request.Params.Get("search") != null)
+            {
+                search = Request.Params.Get("search").Trim();
+
+                // Search through titles and contents of a post
+                List<string> userIds = db.Users.Where(
+                    user => user.UserName.Contains(search) 
+                    || user.Email.Contains(search)
+                    ).Select(us => us.Id).ToList();
+
+                users = users.Where(user => userIds.Contains(user.Id)).OrderBy(u => u.UserName);
+            }
+
+            ViewBag.SearchString = search;
             ViewBag.UsersList = users;
             ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), User.IsInRole("Editor") || User.IsInRole("Admin"));
             return View();
@@ -31,7 +50,7 @@ namespace OnlyFriends.Controllers
         
         public ActionResult Show(string id)
         {
-            System.Diagnostics.Debug.WriteLine((id == null ? "null" : id));
+            // System.Diagnostics.Debug.WriteLine((id == null ? "null" : id));
             if (id == User.Identity.GetUserId())
                 return RedirectToAction("MyPage");
             ApplicationUser user = db.Users.Find(id);

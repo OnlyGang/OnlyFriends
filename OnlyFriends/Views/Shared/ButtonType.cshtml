@@ -11,10 +11,12 @@
         {
             using (Html.BeginForm(actionName: "New", controllerName: "UserRelations", method: FormMethod.Post))
             {
+            <div style="display: inline">
                 @Html.Hidden("User1Id", @ViewData["User1Id"])
                 @Html.Hidden("User2Id", @ViewData["User2Id"])
-                @Html.Hidden("Status", @ViewData["Status"]);
-                <button type="submit" class='btn btn-success'> @ViewData["Type"] </button>
+                @Html.Hidden("Status", @ViewData["Status"])
+                <button type="submit" class='btn btn-@ViewData["Color"]' style="display: inline"> @ViewData["Type"] </button>
+            </div>
             }
 
             break;
@@ -23,11 +25,13 @@
         {
             using (Html.BeginForm(actionName: "Edit", controllerName: "UserRelations", method: FormMethod.Post))
             {
-                @Html.HttpMethodOverride(HttpVerbs.Put);
+            <div style="display: inline">
+                @Html.HttpMethodOverride(HttpVerbs.Put)
                 @Html.Hidden("User1Id", @ViewData["User1Id"])
                 @Html.Hidden("User2Id", @ViewData["User2Id"])
-                @Html.Hidden("Status", @ViewData["Status"]);
-                <button type="submit" class='btn btn-warning'> @ViewData["Type"] </button>
+                @Html.Hidden("Status", @ViewData["Status"])
+                <button type="submit" class='btn btn-@ViewData["Color"]' style="display: inline"> @ViewData["Type"] </button>
+            </div>
             }
 
             break;
@@ -36,8 +40,10 @@
         {
             using (Html.BeginForm(actionName: "Delete", controllerName: "UserRelations", method: FormMethod.Post, routeValues: new { User1Id = ViewData["User1Id"], User2Id = ViewData["User2Id"] }))
             {
+            <div style="display: inline">
                 @Html.HttpMethodOverride(HttpVerbs.Delete)
-                <button type="submit" class='btn btn-danger'> @ViewData["Type"] </button>
+                <button type="submit" class='btn btn-@ViewData["Color"]' > @ViewData["Type"] </button>
+            </div>
             }
             break;
         }

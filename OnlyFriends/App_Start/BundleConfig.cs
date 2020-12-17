@@ -24,7 +24,15 @@ namespace OnlyFriends
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/EditStyles.css"));
+
+            // This is for Moment.js
+            bundles.Add(new ScriptBundle("~/bundles/moment").Include(      
+                       "~/Scripts/moment.js",      
+                       "~/Scripts/moment-with-locales.js",
+                       "~/Content/UsefulFunctions.js"));
+
         }
     }
 }

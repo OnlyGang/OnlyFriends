@@ -14,16 +14,27 @@
 
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg" style="border-bottom: 2px solid rgba(138,150,163,.25); box-shadow: 0 0 2px rgba(0,0,0,.16);">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item"><a href="@Url.Action("Index", "Home")" title="Home" class="nav-link"><img width="150em" alt="Logo" src="@Url.Content("~/Content/Images/Logo.png")" class="nav-link" /></a></li>
-            <li class="nav-item"><a href="@Url.Action("Index", "Posts")" title="Posts" class="nav-link"><img width="50em"  alt="Posts" src="@Url.Content("~/Content/Images/Posts.svg")" class="nav-link"/></a></li>
-            <li class="nav-item"><a href="@Url.Action("Index", "Groups")" title="Groups" class="nav-link"><img width="50em" alt="Groups" src="@Url.Content("~/Content/Images/Groups.svg")" class="nav-link" /></a></li>
-            <li class="nav-item"><a href="@Url.Action("Index", "Users")" title="Users" class="nav-link"><img width="50em" alt="Users" src="@Url.Content("~/Content/Images/Users.svg")" class="nav-link" /></a></li>
-        </ul>
-         @Html.Partial("_LoginPartial")
+    <nav class="navbar fixed-top navbar-expand-md" style="border-bottom: 2px solid rgba(138,150,163,.25); box-shadow: 0 0 2px rgba(0,0,0,.16); background-color: #FFF">
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a href="@Url.Action("Index", "Home")" title="Home" class="nav-link"><img width="120em" alt="Logo" src="@Url.Content("~/Content/Images/Logo.png")" class="nav-link" style="padding: 0; margin-top:5px;" /></a></li>
+            </ul>
+        </div>
+        <div class="mx-auto order-0">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a href="@Url.Action("Index", "Posts")" title="Posts" class="nav-link"><img width="35em" alt="Posts" src="@Url.Content("~/Content/Images/Posts.svg")" class="nav-link" style="padding: 0; margin: 0 5rem" /></a></li>
+                <li class="nav-item"><a href="@Url.Action("Index", "Groups")" title="Groups" class="nav-link"><img width="35em" alt="Groups" src="@Url.Content("~/Content/Images/Groups.svg")" class="nav-link" style="padding: 0; margin: 0 5rem" /></a></li>
+                <li class="nav-item"><a href="@Url.Action("Index", "Users")" title="Users" class="nav-link"><img width="35em" alt="Users" src="@Url.Content("~/Content/Images/Users.svg")" class="nav-link" style="padding: 0; margin: 0 5rem" /></a></li>
+            </ul>
+        </div>
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ml-auto">
+                @Html.Partial("_LoginPartial")
+            </ul>
+        </div>
     </nav>
-    <div class="container body-content">
+
+    <div class="container body-content @ViewBag.BodyClass">
         @RenderBody()
         <hr />
         <footer>
@@ -33,6 +44,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/moment")
     @RenderSection("scripts", required: false)
 </body>
 </html>

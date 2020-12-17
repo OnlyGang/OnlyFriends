@@ -1,45 +1,73 @@
 ﻿@model OnlyFriends.Models.ApplicationUser
-
+<div class="card">
 @using (Html.BeginForm(actionName: "Edit", controllerName: "Users", routeValues: new { id = Model.Id }))
 {
-    @Html.HttpMethodOverride(HttpVerbs.Put)
-    <br />
-    if (ViewBag.CurrentUser.Item1 == Model.Id)
-    {
-        <i class="glyphicon glyphicon-user"></i>
-        @Html.Label("UserName", "Nume utilizator", new { @class = "" })
+        @Html.HttpMethodOverride(HttpVerbs.Put)
         <br />
-        @Html.EditorFor(m => m.UserName)
-        <br />
-        <br />
-        <i class="glyphicon glyphicon-envelope"></i>
-        @Html.Label("Email", "Email utilizator", new { @class = "" })
-        <br />
-        @Html.EditorFor(m => m.Email)
-        <br />
-        <br />
-        <i class="glyphicon glyphicon-phone"></i>
-        @Html.Label("PhoneNumber", "Numar telefon")
-        <br />
-        @Html.EditorFor(m => m.PhoneNumber)
-        <br />
-        @Html.Label("IsPrivate", "Make private:");
-        @Html.CheckBox("IsPrivate", Model.IsPrivate);
-        <br />
-        @Html.Hidden("newRole", (string)ViewBag.userRole);
-    }
+        <div class="form">
+            @if (ViewBag.CurrentUser.Item1 == Model.Id)
+            {
+                <i class="fa fa-user"></i>
+                <strong>@Html.Label("UserName", "Nume utilizator")</strong>
+                <br />
+                @Html.TextBox("Username", Model.UserName, new { @class = "form__input" })
+                <br />
+                <br />
+                <i class="fa fa-envelope"></i>
+                <strong>@Html.Label("Email", "Email utilizator")</strong>
+                <br />
+                @Html.TextBox("Email", Model.Email, new {@class = "form__input"})
+                <br />
+                <br />
+                <i class="fa fa-phone"></i>
+                <strong>@Html.Label("PhoneNumber", "Numar telefon")</strong>
+                <br />
+                @Html.TextBox("PhoneNumber", Model.PhoneNumber, new { @class = "form__input" })
+                <br />
+                <strong>@Html.Label("IsPrivate", "Make private:")</strong>
+                @Html.CheckBox("IsPrivate", Model.IsPrivate)
+                <br />
+                @Html.Hidden("newRole", (string)ViewBag.userRole)
+            }
 
-    if (ViewBag.CurrentUser.Item2)
-    {
-        @Html.HiddenFor(m => m.UserName)
-        @Html.HiddenFor(m => m.Email)
-        @Html.HiddenFor(m => m.PhoneNumber)
-        @Html.HiddenFor(m => m.IsPrivate)
-        <i class="glyphicon glyphicon-th-list"></i>
-        @Html.Label("newRole", "Selectati rolul")
-        @Html.DropDownList("newRole", new SelectList(Model.AllRoles, "Value", "Text", ViewBag.userRole), null, new { @class = "form-control" })
-        <br />
-        <button class="btn btn-sm btn-success" type="submit">Edit</button>
-    }
+            @if (ViewBag.CurrentUser.Item2)
+            {
+                @Html.HiddenFor(m => m.UserName)
+                @Html.HiddenFor(m => m.Email)
+                @Html.HiddenFor(m => m.PhoneNumber)
+                @Html.HiddenFor(m => m.IsPrivate)
+                <i class="glyphicon glyphicon-th-list"></i>
+                <strong>@Html.Label("newRole", "Selectati rolul")</strong>
+                @Html.DropDownList("newRole", new SelectList(Model.AllRoles, "Value", "Text", ViewBag.userRole), null, new { @class = "form__input" })
+                <br />
 
-}
+            }
+            <button class="btn btn-lg btn-block btn-success" type="submit">Edit</button>
+
+        </div>
+    }
+</div>
+@*        <div class="card">
+            @using (Html.BeginForm(actionName: "Edit", controllerName: "Groups"))
+            {
+                @Html.HttpMethodOverride(HttpVerbs.Put)
+
+                <div class="form">
+                    <strong> @Html.Label("Title", "Post title")</strong>
+                    <br />
+                    @Html.TextBox("Title", Model.Title, new { @class = "form__input" })
+                    @Html.ValidationMessage("Title", null, new { @class = "text-danger" })
+                    <br />
+                    <br />
+                    <strong>@Html.Label("Content", "Post's Content:")</strong>
+                    <br />
+                    @Html.TextArea("Content", Model.Content, new { @class = "form__input" })
+                    @Html.ValidationMessage("Description", null, new { @class = "text-danger" })
+                    <br />
+                    @Html.HiddenFor(m => m.Date)
+
+
+                    <button class="btn btn-sm btn-success" type="submit">Edit Post</button>
+                </div>
+            }
+        </div>*@

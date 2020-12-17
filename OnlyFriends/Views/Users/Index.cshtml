@@ -1,12 +1,26 @@
 ﻿@{
- ViewBag.Title = "Afisare utilizatori";
+ ViewBag.Title = "Users";
 }
 
 <h1>@TempData["ErrorMsg"]</h1>
 
-<ol class="breadcrumb">
-    <li><h3>@ViewBag.Title</h3></li>
-</ol>
+<!-- Search bar -->
+<br />
+<div class="navbar navbar-light bg-light justify-content-between">
+    @if (ViewBag.SearchString != "") 
+    {
+        <h3 style="font-weight: 700">Search result for "@ViewBag.SearchString"  <a href="/Users" style="text-decoration: none; color: #000000";"><i class="fa fa-times" style="font-size: 70%;"></i></a></h3>
+    }
+    else 
+    {
+        <h3 style="font-weight: 700;">@ViewBag.Title</h3>
+    }
+    <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search user" aria-label="Search" value=@ViewBag.SearchString >
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+</div>
+<br />
 
 @foreach (var user in ViewBag.UsersList)
 {

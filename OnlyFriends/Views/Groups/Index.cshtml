@@ -1,23 +1,37 @@
-﻿
-@{
-    ViewBag.Title = "Index";
+﻿@{
+    ViewBag.Title = "Groups";
 }
 
-<h2>Welcome to Groups</h2>
-
-@Html.ActionLink("Create a new group", "New", "Groups", new { @class = "btn btn-info block" })
+<!-- Search bar -->
+<br />
+<div class="navbar navbar-light bg-light justify-content-between">
+    @if (ViewBag.SearchString != "")
+    {
+        <h3 style="font-weight: 700">Search result for "@ViewBag.SearchString"  <a href="/Groups" style="text-decoration: none; color: #000000";"><i class="fa fa-times" style="font-size: 70%;"></i></a></h3>
+        
+    }
+    else
+    {
+        <h3 style="font-weight: 700;">@ViewBag.Title</h3>
+    }
+    <form class="form-inline">
+        @Html.ActionLink("Create a new group", "New", "Groups", new { @class = "btn btn-info block", @style = "margin-right: 10px;" })
+        <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search group" aria-label="Search" value=@ViewBag.SearchString>
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+</div>
 <br />
 
 @foreach (OnlyFriends.Models.Group group in ViewBag.Groups)
 {
-    <div class="card" style="margin-top: 1em">
-        <div class="card-body">
-            @Html.Partial("GroupInfo", group)
+<div class="card" style="margin-top: 1em">
+    <div class="card-body">
+        @Html.Partial("GroupInfo", group)
 
-            <div class="panel-footer">
-                <a class=" btn btn-sm btn btn-success" href="/Groups/Show/@group.GroupId">View Group</a>
-            </div>
+        <div class="panel-footer">
+            <a class=" btn btn-sm btn btn-success" href="/Groups/Show/@group.GroupId">View Group</a>
         </div>
     </div>
+</div>
 }
 

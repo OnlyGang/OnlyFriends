@@ -14,7 +14,7 @@
             <div>
                 <i class="glyphicon glyphicon-user"></i> <h5 class="mt-0">@Model.User.UserName</h5>
                 <p>@Model.Content</p>
-                <small class="pull-right show-date">@Model.Date</small>
+                <small class="pull-right show-date">@Model.Date.ToString("dd/MM/yyyy HH:mm:ss")</small>
             </div>
             <!--Like button-->
             <div style="display: inline-block; float: left; margin-right: 15px">

@@ -114,3 +114,36 @@ h1 {
     padding: 50px; 
     box-shadow: 0 10px 25px rgba(92,99,105,.2);
 }
+
+/* For Homepage */
+h2.home-headers {
+    margin-top: 75px;
+}
+
+.home-headers {
+    text-align: center;
+    font-weight: 700;
+}
+
+.action-buttons {
+    text-align: center;
+    width: 75%;
+    display: block;
+    margin: 15px auto 0 auto;
+    padding: .75rem 2rem;
+    outline: none;
+    border: none;
+    background-color: var(--first-color);
+    color: #fff;
+    font-size: var(--normal-font-size);
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: .3s;
+    text-decoration: none;
+}
+
+.action-buttons:hover {
+    text-decoration: none;
+    color: #fff;
+    box-shadow: 0 10px 36px rgba(0,0,0,.15);
+}

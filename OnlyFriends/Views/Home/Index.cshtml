@@ -2,9 +2,52 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <img src="~/Content/Images/Logo.png" width="80%"/>
-    <h1>OnlyFriends</h1>
-    <h3 class="lead">Welcome to OnlyFriends. A brand know social platform that will blow your fans</h3>
-    <a href="/Posts/Index">Go to Posts</a>
+<div class="row" style="margin-top: 5%">
+    <div class="col-md-6" style="margin-top: 20%">
+        <img src="~/Content/Images/HomePage.svg" width=80% style="margin: 0 auto; " />
+    </div>
+    <div class="col-md-6 logres-div logres-form" style="margin-top: 3%">
+        <div style="text-align: center;">
+            <img src="~/Content/Images/Logo.png" alt="Logo" width="90%"/>
+        </div>
+        <div style="text-align: center;">
+            <h6 style="margin: 10px auto;">The perfect place to interact with your friends!</h6">
+        </div>
+        <div>
+            @if (ViewBag.CurrentUser != null) 
+            {
+                <h2 class="home-headers">Welcome, @ViewBag.CurrentUser.UserName!</h2>
+                <h5 class="home-headers">Start connecting with people:</h5>
+            }
+            else 
+            {
+                <h2 class="home-headers">Welcome, stranger!</h2>
+                <h5 class="home-headers">Start connecting with people:</h5>
+            }
+        </div>
+        <br />
+        <div>
+            @if (ViewBag.CurrentUser != null) 
+            {
+                @Html.ActionLink("My Profile", "Show", "Users", new { id = (string) ViewBag.CurrentUser.Id }, new { @class = "action-buttons" });
+                @Html.ActionLink("Browse Posts", "Index", "Posts", null, new { @class = "action-buttons" });
+            }
+            else 
+            { 
+                <div class="wrap-button">
+                    @Html.ActionLink("Log in", "Login", "Account", null, new { @class = "action-buttons" })
+                </div>
+                <div class="wrap-button">
+                    @Html.ActionLink("Register", "Register", "Account", null, new { @class = "action-buttons" })
+                </div>
+            }
+            @Html.ActionLink("Browse Groups", "Index", "Groups", null, new { @class = "action-buttons" })
+            @Html.ActionLink("Browse Users", "Index", "Users", null, new { @class = "action-buttons" })
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <link href="~/Content/LoginRegister.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/jqueryval")
+}

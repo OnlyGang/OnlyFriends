@@ -1,106 +1,192 @@
 ﻿@model OnlyFriends.Models.Group
+@{
+    var Members = Model.GroupMembers.ToList();
+    ViewBag.Title = Model.Title;
+}
 
 
-<h1>@ViewBag.Message</h1>
-<h2>News</h2>
 
+<div class="row" style="margin: 20px;">
+    <div class="col-md-8">
+        <h2 style="font-weight:700;">@Model.Title</h2>
+        <div>
+            <br />
+            <h3><i class="fa fa-user"></i> <strong>Creator: </strong><span class="label label-default">@Model.User.UserName</span></h3>
 
-
-
-@if (!ViewBag.IsMember)
-{
-    if (!@Model.IsPrivate)
-    {
-        using (Html.BeginForm(actionName: "New", controllerName: "GroupMembers", method: FormMethod.Post))
+            <br />
+            <i class="fa fa-file"></i> <strong>Description: </strong>
+            <strong>@Model.Description</strong>
+            <br />
+            <br />
+        </div>
+        <br />
+        @if (ViewBag.CurrentUser.Item1 == Model.UserId)
         {
-            @Html.Hidden("GroupId", (int)Model.GroupId)
-            @Html.Hidden("UserId", (string)ViewBag.CurrentUser.Item1)
-            <button type="submit" class="btn btn-primary">Join Group</button>
-        }
-    }
-    else
-    {
-        using (Html.BeginForm(actionName: "New", controllerName: "GroupRequests", method: FormMethod.Post))
-        {
-            @Html.Hidden("GroupId", (int)Model.GroupId)
-            @Html.Hidden("SenderId", (string)ViewBag.CurrentUser.Item1)
-            <button type="submit" class="btn btn-primary">Send Request</button>
-        }
-    }
-}
-else
-{
-    using (Html.BeginForm(actionName: "Delete", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { GroupId = Model.GroupId, UserId = (string)ViewBag.CurrentUser.Item1 }))
-    {
-        @Html.HttpMethodOverride(HttpVerbs.Delete)
-        TempData["ReturnTo"] = "Groups";
-        <button type="submit" class="btn btn-primary">Leave Group</button>
-    }
-}
+            using (Html.BeginForm(actionName: "Edit", controllerName: "Groups", method: FormMethod.Get, routeValues: new { id = Model.GroupId }))
+            {
+                <button class="btn btn-primary" type="submit">Edit Group</button>
+                <!-- go to requests-->
 
-@foreach (var gm in Model.GroupMembers)
-{
-    <span style="display: inline-block; font-size: 90%">@gm.User.Email</span>
-}
+                <a class="btn btn-primary" href="/GroupRequests/Show/@Model.GroupId">Group Relations</a>
+            }
+        }
+
+        @if (ViewBag.CurrentUser.Item2)
+        {
+            using (Html.BeginForm(actionName: "Delete", controllerName: "Groups", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
+            {
+                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                <button class="btn btn-danger" type="submit">Delete Group</button>
+            }
+        }
+
+
+
+
+
+
+        @if (!ViewBag.IsMember)
+        {
+            if (!@Model.IsPrivate)
+            {
+                using (Html.BeginForm(actionName: "New", controllerName: "GroupMembers", method: FormMethod.Post))
+                {
+                    @Html.Hidden("GroupId", (int)Model.GroupId)
+                    @Html.Hidden("UserId", (string)ViewBag.CurrentUser.Item1)
+                    <button type="submit" class="btn btn-primary">Join Group</button>
+                }
+            }
+            else
+            {
+                using (Html.BeginForm(actionName: "New", controllerName: "GroupRequests", method: FormMethod.Post))
+                {
+                    @Html.Hidden("GroupId", (int)Model.GroupId)
+                    @Html.Hidden("SenderId", (string)ViewBag.CurrentUser.Item1)
+                    <button type="submit" class="btn btn-primary">Send Request</button>
+                }
+            }
+        }
+        else
+        {
+            using (Html.BeginForm(actionName: "Delete", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { GroupId = Model.GroupId, UserId = (string)ViewBag.CurrentUser.Item1 }))
+            {
+                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                TempData["ReturnTo"] = "Groups";
+                <button type="submit" class="btn btn-primary">Leave Group</button>
+            }
+        }
+    </div>
+    <div class="col-md-4">
+        <img src="~/Content/Images/Group.svg" style="width: 80%" />
+    </div>
+</div>
+<div class="card">
+    <h3>Members:</h3>
+    <hr />
+    <div class="row">
+        <div class="col-md-3">
+            @for (var i = 0; i < Members.Count(); i++)
+            {
+                if (i % 4 == 0)
+                {
+                    <p><a href="/Users/Show/@Members[i].UserId"><i class="fa fa-user"></i> @Members[i].User.UserName</a></p>
+                }
+            }
+
+        </div>
+        <div class="col-md-3">
+            @for (var i = 0; i < Members.Count(); i++)
+            {
+                if (i % 4 == 1)
+                {
+                    <p>  <a href="/Users/Show/@Members[i].UserId"><i class="fa fa-user"></i> @Members[i].User.UserName</a></p>
+                }
+            }
+
+        </div>
+        <div class="col-md-3">
+            @for (var i = 0; i < Members.Count(); i++)
+            {
+                if (i % 4 == 2)
+                {
+                    <p><a href="/Users/Show/@Members[i].UserId"><i class="fa fa-user"></i> @Members[i].User.UserName</a></p>
+                }
+            }
+
+        </div>
+        <div class="col-md-3">
+            @for (var i = 0; i < Members.Count(); i++)
+            {
+                if (i % 4 == 3)
+                {
+                    <p> <a href="/Users/Show/@Members[i].UserId"><i class="fa fa-user"></i> @Members[i].User.UserName</a></p>
+                }
+            }
+
+        </div>
+    </div>
+</div>
 
 
 @if (ViewBag.CurrentUser.Item2)
 {
-    using (Html.BeginForm(actionName: "Delete", controllerName: "Groups", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
-    {
-        @Html.HttpMethodOverride(HttpVerbs.Delete)
-        <button class="btn btn-danger pull-right" type="submit">Delete Group</button>
-    }
 
-    using (Html.BeginForm(actionName: "Edit", controllerName: "Groups", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
-    {
-        @Html.HttpMethodOverride(HttpVerbs.Put)
-        <button class="btn btn-primary pull-right" type="submit">Edit Group</button>
-    }
+
+
 }
 
 @if (ViewBag.IsMember || ViewBag.CurrentUser.Item2)
 {
-    using (Html.BeginForm(actionName: "New", controllerName: "Posts"))
-    {
-        <div class="panel-body">
-            @Html.Hidden("GroupId", Model.GroupId)
-            @Html.Label("Title", "Title")
-            <br />
-            @Html.TextBox("Title", "", new { @class = "form-control" })
-            @Html.ValidationMessage("Title", null, new { @class = "text-danger" })
-            <br />
-            @Html.Label("Content", "Content")
-            <br />
-            @Html.TextArea("Content", "", new { @class = "form-control" })
-            @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
-            <br />
-            @{ 
-                TempData["action"] = "Show";
-                TempData["controller"] = "Groups";
-                TempData["id"] = (int) Model.GroupId;
-            }
-            <button class="btn btn-success " type="submit">Add Post</button>
-        </div>
-    }
-}
+    <div class="card">
+        @using (Html.BeginForm(actionName: "New", controllerName: "Posts"))
+        {
+            <h2>Share your thoughts with the group!</h2>
+            <div class="form">
+                <strong> @Html.Label("Title", "Title:")</strong>
+                <br />
+                @Html.TextBox("Title", "", new { @class = "form__input" })
+                @Html.ValidationMessage("Title", null, new { @class = "text-danger" })
+                <br />
+                <br />
+                <strong>@Html.Label("Content", "Post's Content:")</strong>
+                <br />
+                @Html.TextArea("Content", null, new { @class = "form__input" })
+                @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
+                <br />
+                @Html.Hidden("GroupId", Model.GroupId)
+                @{
+                    TempData["action"] = "Show";
+                    TempData["controller"] = "Groups";
+                    TempData["id"] = (int)Model.GroupId;
+                }
+                <button class="btn btn-success btn-lg btn-block" type="submit">Add Post</button>
 
-@foreach (var post in Model.Posts)
-{
-    <div class="panel panel-default">
-
-        @Html.Partial("PostInfo", post)
-
-        <div class="panel-footer">
-            <a class=" btn btn-sm btn btn-success" href="/Posts/Show/@post.PostId">View post</a>
-        </div>
-
+            </div>
+        }
     </div>
 }
 
-@section Scripts{
-    <script src="@Url.Content("~/Content/UsefulFunctions.js")"></script>    
+<!-- Show groups posts -->
+@foreach (var post in Model.Posts.OrderByDescending(m => m.Date))
+{
+    if (post.GroupId != null)
+    {
+        <div class="card" style="margin-top: 1em">
+            <div class="card-body">
+                @Html.Partial("PostInfo", post)
+
+                <div class="panel-footer">
+                    <a class=" btn btn-success btn-lg btn-block" href="/Posts/Show/@post.PostId">View post</a>
+                </div>
+            </div>
+        </div>
+
+    }
 }
+
+@*@section Scripts{
+        <script src="@Url.Content("~/Content/UsefulFunctions.js")"></script>
+    }*@
 
 
 

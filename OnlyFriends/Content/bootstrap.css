@@ -572,9 +572,10 @@ pre code {
 }
 
 @media (min-width: 1200px) {
-  .container, .container-sm, .container-md, .container-lg, .container-xl {
-    max-width: 1140px;
-  }
+    .container, .container-sm, .container-md, .container-lg, .container-xl {
+        max-width: 1140px;
+        /*1140*/
+    }
 }
 
 .row {
@@ -4729,6 +4730,7 @@ input[type="button"].btn-block {
     border-radius: 0.25rem;
     padding: 50px; 
     box-shadow: 0 10px 25px rgba(92,99,105,.2);
+    margin: 20px;
 }
 
 .card > hr {

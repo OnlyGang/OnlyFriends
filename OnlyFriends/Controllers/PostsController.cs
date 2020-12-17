@@ -29,6 +29,23 @@ namespace OnlyFriends.Controllers
 
             
             var posts = db.Posts.Where(u => (u.UserId == CurrUserId || (u.GroupId != null && myGroups.Contains((int)u.GroupId)) || (u.GroupId == null && myFriends.Contains(u.UserId)))).OrderByDescending(a => a.Date).Include("User");
+
+            // Search 
+            var search = "";
+            if (Request.Params.Get("search") != null)
+            {
+                search = Request.Params.Get("search").Trim();
+
+                // Search through titles and contents of a post
+                List<int> postsIds = db.Posts.Where(
+                    post => post.Title.Contains(search)
+                    || post.Content.Contains(search)
+                    ).Select(p => p.PostId).ToList();
+
+                posts = posts.Where(post => postsIds.Contains(post.PostId)).OrderByDescending(a => a.Date).Include("User"); ;
+            }
+
+            ViewBag.SearchString = search;
             ViewBag.Posts = posts;
 
             return View();
