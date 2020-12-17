@@ -30,11 +30,6 @@ namespace OnlyFriends.Controllers
             
             var posts = db.Posts.Where(u => (u.UserId == CurrUserId || (u.GroupId != null && myGroups.Contains((int)u.GroupId)) || (u.GroupId == null && myFriends.Contains(u.UserId)))).OrderByDescending(a => a.Date).Include("User");
             ViewBag.Posts = posts;
-            
-            if (TempData.ContainsKey("message"))
-            {
-                ViewBag.Message = TempData["message"];
-            }
 
             return View();
         }
@@ -73,7 +68,7 @@ namespace OnlyFriends.Controllers
                 {
                     db.Posts.Add(post);
                     db.SaveChanges();
-                    TempData["message"] = "Postarea a fost adaugata!";
+                    TempData["message"] = "Your post has been added!";
                     /*if (post.GroupId != null)
                     {
                         return RedirectToAction("Show", "Groups", new { id = post.GroupId });
