@@ -15,7 +15,7 @@ namespace OnlyFriends.Controllers
         // GET: Groups
         public ActionResult Index()
         {
-            var groups = db.Groups.Include("User");
+            var groups = db.Groups.Include("User").OrderByDescending(a => a.Date);
             ViewBag.Groups = groups;
             return View();
         }
@@ -65,7 +65,7 @@ namespace OnlyFriends.Controllers
             var group = db.Groups.Find(id);
             ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), group.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
             ViewBag.IsMember = db.GroupMembers.Find(id, User.Identity.GetUserId()) != null;
-
+            
             return View(group);
 
         }
@@ -75,6 +75,7 @@ namespace OnlyFriends.Controllers
         {
 
             Group group = db.Groups.Find(id);
+            ViewBag.Group = group;
             if (group.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"))
             {
                 return View(group);

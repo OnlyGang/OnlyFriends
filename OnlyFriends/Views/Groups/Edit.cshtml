@@ -1,34 +1,39 @@
 ﻿@model OnlyFriends.Models.Group
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = Model.Title;
 }
 
 
-<h2>Edit post</h2>
-@using (Html.BeginForm(actionName: "Edit", controllerName: "Groups"))
-{
-    @Html.HttpMethodOverride(HttpVerbs.Put)
+<h2>@ViewBag.Group.Title</h2>
+<div class="card">
+    @using (Html.BeginForm(actionName: "Edit", controllerName: "Groups"))
+    {
+        @Html.HttpMethodOverride(HttpVerbs.Put)
+
+        <div class="card-body">
+            <h1> @Html.Label("Title", "Group Title", new { @class = "mt-4" })</h1>
+            <br />
+            @Html.EditorFor(m => m.Title, new { @class = "form-control" })
+            @Html.ValidationMessage("Title", null, new { @class = "text-danger" })
+            <br />
+            <br />
+            <strong>@Html.Label("Description", "Group description:")</strong>
+            <br />
+            @* @Html.TextArea("Description", Model.Description, new { @class = "form-control-lg", @InnerText});*@
+            <textarea name="Description">@Model.Description</textarea>
+            @Html.ValidationMessage("Description", null, new { @class = "text-danger" })
+            <br />
+            @Html.Label("IsPrivate", "Make private:");
+            @Html.CheckBox("IsPrivate", Model.IsPrivate);
+            <br />
+            <br />
+            @Html.HiddenFor(m => m.Date)
 
 
-    @Html.Label("Title", "Group Title")
-    <br />
-    @Html.EditorFor(m => m.Title, new { @class = "form-control" })
-    @Html.ValidationMessage("Title", null, new { @class = "text-danger" })
-    <br />
-    <br />
-    @Html.Label("Description", "Group description:")
-    <br />
-    @Html.TextArea("Description", new { @class = "form-control" })
-    @Html.ValidationMessage("Description", null, new { @class = "text-danger" })
-    <br />
-    @Html.Label("IsPrivate", "Make private:");
-    @Html.CheckBox("IsPrivate", Model.IsPrivate);
-    <br />
-    <br />
-    @Html.HiddenFor(m => m.Date)
-
-
-    <button class="btn btn-sm btn-success" type="submit">Edit group</button>
-
-}
+            <button class="btn btn-sm btn-success" type="submit">Edit group</button>
+        </div>
+    }
+</div>
+@Model.Title
+<textarea name="Description">@(Model.Title)</textarea>
