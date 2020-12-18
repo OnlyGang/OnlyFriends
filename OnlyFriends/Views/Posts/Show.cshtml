@@ -29,8 +29,8 @@ else if (TempData["message"] == "You don't have enough permissions to modify thi
 <div class="card">
     <div class="card-body">
         @Html.Partial("PostInfo", Model)
-
     </div>
+    
     <div class="row">
         <div class="col-md-4" style="text-align:center">
             <!--Like section-->
@@ -40,8 +40,11 @@ else if (TempData["message"] == "You don't have enough permissions to modify thi
                 {
                     @Html.Hidden("PostId", Model.PostId)
                     @Html.Hidden("UserId", (string)ViewBag.CurrentUser.Item1)
-                    <button type="submit" class="btn btn-outline-primary"><i class="fa fa-thumbs-up"></i> Like  <span class="badge badge-light"> @Model.LikeCount </span> </button>
-                    @*<span>@Model.LikeCount</span>*@
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="fa fa-thumbs-up"></i> Like  
+                         @Html.Partial("LikedBy")
+                    </button>
+                    
                 }
             }
             else
@@ -49,10 +52,13 @@ else if (TempData["message"] == "You don't have enough permissions to modify thi
                 using (Html.BeginForm(actionName: "Delete", controllerName: "PostLikes", method: FormMethod.Post, routeValues: new { PostId = Model.PostId, UserId = (string)ViewBag.CurrentUser.Item1 }))
                 {
                     @Html.HttpMethodOverride(HttpVerbs.Delete)
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-thumbs-up"></i>  Like  <span class="badge badge-light"> @Model.LikeCount </span> </button>
-                    @*<span style="margin-bottom: 0">@Model.LikeCount</span>*@
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-thumbs-up"></i>  Like  
+                        @Html.Partial("LikedBy") 
+                    </button>
                 }
             }
+            
         </div>
         @if (ViewBag.CurrentUser.Item2)
         {
@@ -77,16 +83,6 @@ else if (TempData["message"] == "You don't have enough permissions to modify thi
         }
 
     </div>
-    @if (Model.LikeCount > 0)
-    {
-        <div>
-            <span style="display: inline-block; font-weight: bold; font-size: 90%">Liked By:</span>
-            @foreach (var pl in Model.PostLikes)
-            {
-                <span style="display: inline-block; font-size: 90%">@pl.User.UserName</span>
-            }
-        </div>
-    }
 </div>
 
 <!--This is the comments section-->

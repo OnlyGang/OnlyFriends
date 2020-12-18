@@ -16,12 +16,19 @@ namespace OnlyFriends.Controllers
         // GET: Users
         public ActionResult Index()
         {
+            
             var users = db.Users.OrderBy(u => u.UserName);
             /*var users = from user in db.Users
                         orderby user.UserName
                         select user;*/
 
             // Search 
+
+            /*foreach(ApplicationUser u in users)
+            {
+                UserRelationsCount[u.Id] = new { NrFollowers = }
+            }*/
+
             var search = "";
             if (Request.Params.Get("search") != null)
             {
@@ -65,6 +72,22 @@ namespace OnlyFriends.Controllers
             ViewBag.RoleName = userRoleName;
             ViewBag.IsFriendRequestSent = (db.FriendRequests.Find(User.Identity.GetUserId(), id) != null);
             return View(user);
+        }
+
+        public ActionResult ShowRelations (string id)
+        {
+            if(id == User.Identity.GetUserId())
+            {
+                var user = db.Users.Find(id);
+                ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), user.Id == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
+                return View(user);
+            }
+            else
+            {
+                TempData["message"] = "You don't have enough permissions to access this page!";
+                return RedirectToAction("Index");
+            }
+            
         }
 
         public ActionResult Edit(string id)

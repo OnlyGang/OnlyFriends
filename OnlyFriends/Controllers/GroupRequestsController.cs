@@ -19,16 +19,16 @@ namespace OnlyFriends.Controllers
             return View();
         }
 
-        public ActionResult Show(int GroupId)
+      /*  public ActionResult Show(int GroupId)
         {
             var group = db.Groups.Find(GroupId);
             var grouprequests = group.GroupRequests;
             ViewBag.Group = group;
             ViewBag.GroupRequests = grouprequests;
             ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), group.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
-            return View();
+            return View(group);
         }
-
+*/
 
         [HttpPost]
         [Authorize(Roles = "User,Editor,Admin")]

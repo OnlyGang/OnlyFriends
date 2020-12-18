@@ -9,7 +9,7 @@
 {
     case "New":
         {
-            using (Html.BeginForm(actionName: "New", controllerName: "UserRelations", method: FormMethod.Post))
+            using (Html.BeginForm(actionName: "New", controllerName: "UserRelations", method: FormMethod.Post, htmlAttributes: new { @style = "display: inline" }))
             {
             <div style="display: inline">
                 @Html.Hidden("User1Id", @ViewData["User1Id"])
@@ -23,7 +23,7 @@
         }
     case "Edit":
         {
-            using (Html.BeginForm(actionName: "Edit", controllerName: "UserRelations", method: FormMethod.Post))
+            using (Html.BeginForm(actionName: "Edit", controllerName: "UserRelations", method: FormMethod.Post, htmlAttributes: new { @style = "display: inline" }))
             {
             <div style="display: inline">
                 @Html.HttpMethodOverride(HttpVerbs.Put)
@@ -38,7 +38,7 @@
         }
     case "Delete":
         {
-            using (Html.BeginForm(actionName: "Delete", controllerName: "UserRelations", method: FormMethod.Post, routeValues: new { User1Id = ViewData["User1Id"], User2Id = ViewData["User2Id"] }))
+            using (Html.BeginForm(actionName: "Delete", controllerName: "UserRelations", method: FormMethod.Post, routeValues: new { User1Id = ViewData["User1Id"], User2Id = ViewData["User2Id"] }, htmlAttributes: new { @style = "display: inline" }))
             {
             <div style="display: inline">
                 @Html.HttpMethodOverride(HttpVerbs.Delete)

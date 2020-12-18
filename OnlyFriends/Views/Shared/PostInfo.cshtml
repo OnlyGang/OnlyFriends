@@ -1,11 +1,13 @@
 ﻿<h1 class="mt-4">@Model.Title</h1>
+
 <p class="lead">
     <a href="/Users/Show/@Model.User.Id"><i class="fa fa-user"></i>  by @Model.User.UserName</a>
+    <span class="label label-success show-date pull-right">@Model.Date.ToString("dd/MM/yyyy HH:mm:ss")</span>
 </p>
 <p class="lead">
-    <div class="card-text" style="text-align : center">@Model.Content</div>
+    <div class="card-text" style="text-align : justify">@Model.Content</div>
     <br />
-    <span class="label label-success show-date">@Model.Date.ToString("dd/MM/yyyy HH:mm:ss")</span>
+    
     <br />
     <hr />
 </p> 

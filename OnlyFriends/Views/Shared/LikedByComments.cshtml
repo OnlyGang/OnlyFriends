@@ -1,0 +1,24 @@
+﻿<span class="likedby-badge likedby-badge-light"> @Model.LikeCount
+    @if (Model.LikeCount != 0)
+    {
+        <div class="likedby-div">
+            <h6>Liked by</h6>
+            <ul>
+                @{var idx = 0;}
+                @foreach (var pl in Model.CommentLikes)
+                {
+                    if (idx < 10)
+                    {
+                        <li><a href="/Users/Show/@pl.UserId">@pl.User.UserName</a></li>
+                        ++idx;
+                    }
+                    else
+                    {
+                        <li>and @(Model.LikeCount - idx)</li>
+                        break;
+                    }
+                }
+            </ul>
+        </div>
+    }
+</span>

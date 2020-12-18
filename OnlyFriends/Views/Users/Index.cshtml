@@ -22,25 +22,39 @@
 </div>
 <br />
 
-@foreach (var user in ViewBag.UsersList)
+@foreach (OnlyFriends.Models.ApplicationUser user in ViewBag.UsersList)
 {
     if (!(ViewBag.CurrentUser.Item1 == null && user.IsPrivate))
     {
-        <div class="panel-heading">Nume utilizator: @user.UserName</div>
-        <div class="panel-body">
-            <i class="glyphicon glyphicon-envelope"></i> Email utilizator: <span class="label label-default">@user.Email</span>
-            <br />
-            <br />
-            @if (@user.PhoneNumber != null)
-            {
-                <i class="glyphicon glyphicon-phone"></i>@:Telefon utilizator:<span class="label label-default">@user.PhoneNumber</span>
-            }
+        <div class="card" style="padding: 5px">
+            <div class="panel-heading"><i class="fa fa-user"></i> @user.UserName</div>
+            <div class="panel-body">
+                <i class="fa fa-envelope"></i>  <span class="label label-default">@user.Email</span>
+                <br />
+                <br />
+                @if (@user.PhoneNumber != null)
+                {
+                    <i class="fa fa-phone"></i>@:Telefon utilizator:<span class="label label-default">@user.PhoneNumber</span>
+                }
+                @*@if (user.MyUserRelations.ToList().Contains(ViewBag.CurrentUser.Item1))
+                {
+                    switch (user.MyUserRelations.ToList().Find(ViewBag.CurrentUser.Item1).Status)
+                    {
+                        case "Friend":<strong>Friend</strong> break;
+                        case "Follows": <strong>Follow</strong> break;
+                        case "IsFollowed": <strong>Your Follower</strong> break;
+                        case "Blocked": <strong>Blocked</strong> break;
+                        case "IsBlocked": <strong>Blocked you</strong> break;
+                        default: break;
+                    }
+                }*@
+                </div>
+            <div class="panel-footer">
+                <a class="btn btn-sm btn-success" href="/Users/Edit/@user.Id"> Editare utilizator</a>
+                <a class="btn btn-sm btn-success" href="/Users/Show/@user.Id"> Vizualizare utilizator</a>
+            </div>
         </div>
-        <div class="panel-footer">
-            <a class="btn btn-sm btn-success" href="/Users/Edit/@user.Id"> Editare utilizator</a>
-             <a class="btn btn-sm btn-success" href="/Users/Show/@user.Id"> Vizualizare utilizator</a>
-        </div>
-        <br />
-        <br />
+
+
     }
-}
+                }

@@ -82,10 +82,27 @@ namespace OnlyFriends.Controllers
             var group = db.Groups.Find(id);
             ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), group.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
             ViewBag.IsMember = db.GroupMembers.Find(id, User.Identity.GetUserId()) != null;
+            ViewBag.SentRequest = db.GroupRequests.Find( User.Identity.GetUserId(), id) != null;
             
             return View(group);
 
         }
+
+        public ActionResult ShowRelations(int id)
+        {
+            var group = db.Groups.Find(id);
+            if (User.Identity.GetUserId() == group.UserId)
+            {
+                ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), group.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
+                return View(group);
+            }
+            else
+            {
+                TempData["message"] = "You don't have enough permissions to view this page!";
+                return RedirectToAction("Index");
+            }
+        }
+
 
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Edit(int id)
@@ -161,6 +178,8 @@ namespace OnlyFriends.Controllers
             }
 
         }
+
+        
 
     }
 }

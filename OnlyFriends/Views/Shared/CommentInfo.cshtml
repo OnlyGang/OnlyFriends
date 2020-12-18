@@ -25,7 +25,7 @@
                         @Html.Hidden("CommentId", (int)Model.CommentId)
                         @Html.Hidden("UserId", (string)ViewBag.CurrentUser.Item1)
                         <button type="submit" class="fa fa-thumbs-o-up" style="border: none; background: transparent"></button>
-                        <span>@Model.LikeCount</span>
+                        @Html.Partial("LikedByComments");
                     }
                 }
                 else
@@ -34,7 +34,7 @@
                     {
                         @Html.HttpMethodOverride(HttpVerbs.Delete)
                         <button type="submit" class="fa fa-thumbs-o-up" style="color: blue; border: none; background: transparent"></button>
-                        <span>@Model.LikeCount</span>
+                        @Html.Partial("LikedByComments")
                     }
                 }
             </div>
@@ -49,18 +49,6 @@
                         @Html.HttpMethodOverride(HttpVerbs.Delete)
                         <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"><i class="fa fa-trash"></i></button>
                     </form>
-                </div>
-            }
-            <!--Like count-->
-            @if (Model.LikeCount > 0)
-            {
-                
-                <div>
-                    <span style="display: inline-block; font-weight: bold; font-size: 90%">Liked By:</span>
-                    @foreach (var pl in Model.CommentLikes)
-                    {
-                        <span style="display: inline-block; font-size: 90%">@pl.User.UserName</span>
-                    }
                 </div>
             }
         </div>

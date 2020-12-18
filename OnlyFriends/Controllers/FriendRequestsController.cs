@@ -82,11 +82,11 @@ namespace OnlyFriends.Controllers
         }
 
 
-        public ActionResult Show(string id)
+        /*public ActionResult Show(string id)
         {
             var user = db.Users.Find(id);
             ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), user.Id == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
             return View(user);
-        }
+        }*/
     }
 }

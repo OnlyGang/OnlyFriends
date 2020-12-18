@@ -147,3 +147,108 @@ h2.home-headers {
     color: #fff;
     box-shadow: 0 10px 36px rgba(0,0,0,.15);
 }
+
+
+/* For liked by on hover */
+.likedby-badge {
+    position: relative;
+    display: inline-block;
+    padding: 0.25em 0.4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .likedby-badge {
+        transition: none;
+    }
+}
+
+a.likedby-badge:hover, a.likedby-badge:focus {
+    text-decoration: none;
+}
+
+.likedby-badge:empty {
+    display: none;
+}
+
+.btn .likedby-badge {
+    position: relative;
+    top: -1px;
+}
+
+.likedby-badge-light {
+    color: #212529;
+    background-color: #f8f9fa;
+}
+
+a.likedby-badge-light:hover, a.likedby-badge-light:focus {
+    color: #212529;
+    background-color: #dae0e5;
+}
+
+a.likedby-badge-light:focus, a.likedby-badge-light.focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(248, 249, 250, 0.5);
+}
+
+.likedby-div {
+    position: absolute;
+    bottom: 30px;
+    left: -65px;
+    width: 150px;
+    background: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 10px 25px rgba(92,99,105,.5);
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.5s;
+    /* Might delete this later*/
+    transform: translateX(0%) translateY(-50px);
+    text-align: left;
+}
+
+.likedby-div:before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: #fff;
+    bottom: -2px;
+    left: 58px;
+    transform: rotate(45deg);
+}
+
+.likedby-badge:hover .likedby-div {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0%) translateY(0px);
+}
+
+.likedby-div h6 {
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.likedby-div ul {
+    font-weight: 400;
+    padding: 0;
+    list-style-type: none;
+}
+
+.likedby-div ul li {
+    padding: 4px 0;
+}
+
+.likedby-div a {
+    color: black;
+}

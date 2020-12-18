@@ -4,8 +4,10 @@
     ViewBag.BodyClass = "FriendRequest";
 }
 
-<a class="btn btn-success " href="/Users/Show/@Model.Id" >Go back to your page</a>
 
+
+<a class="btn btn-primary " href="/Users/Show/@Model.Id" style="margin: 20px; ">Go back to your page</a>
+    
 <div class="row" style="margin:0">
     <div class="col-md-4">
         <div class="card" style="margin: 0">
@@ -14,24 +16,24 @@
 
             @foreach (var rel in Model.MyUserRelations)
             {
-                
-        
-        <div class="row">
-            <strong class="col-md-10">@Html.ActionLink(rel.User2.UserName, "Show", "Users", new { id = rel.User2Id }, null) <span>- @rel.Status</span></strong>
-            
-            <div class="col-md-2">
-                @using (Html.BeginForm(actionName: "Delete", controllerName: "UserRelations", method: FormMethod.Post, routeValues: new { User1Id = rel.User1Id, User2Id = rel.User2Id }))
-                {
-                    @Html.HttpMethodOverride(HttpVerbs.Delete)
 
-                    TempData["action"] = "Show";
-                    TempData["controller"] = "Users";
-                    TempData["id"] = (string)Model.Id;
 
-                    <button class="fa fa-trash pull-right " style="border: none; background: transparent; " type="submit"></button>
-                }
-            </div>
-        </div>
+                <div class="row">
+                    <strong class="col-md-10">@Html.ActionLink(rel.User2.UserName, "Show", "Users", new { id = rel.User2Id }, null) <span>- @rel.Status</span></strong>
+
+                    <div class="col-md-2">
+                        @using (Html.BeginForm(actionName: "Delete", controllerName: "UserRelations", method: FormMethod.Post, routeValues: new { User1Id = rel.User1Id, User2Id = rel.User2Id }))
+                        {
+                            @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+                            TempData["action"] = "Show";
+                            TempData["controller"] = "Users";
+                            TempData["id"] = (string)Model.Id;
+
+                            <button class="fa fa-trash pull-right " style="border: none; background: transparent; " type="submit"></button>
+                        }
+                    </div>
+                </div>
                 <br />
             }
         </div>

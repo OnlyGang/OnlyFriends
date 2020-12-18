@@ -15,6 +15,7 @@
 
             <br />
             <i class="fa fa-file"></i> <strong>Description: </strong>
+            <br />
             <strong>@Model.Description</strong>
             <br />
             <br />
@@ -22,18 +23,19 @@
         <br />
         @if (ViewBag.CurrentUser.Item1 == Model.UserId)
         {
-            using (Html.BeginForm(actionName: "Edit", controllerName: "Groups", method: FormMethod.Get, routeValues: new { id = Model.GroupId }))
+            using (Html.BeginForm(actionName: "Edit", controllerName: "Groups", method: FormMethod.Get, routeValues: new { id = Model.GroupId }, htmlAttributes: new { @style = "display: inline" }))
             {
                 <button class="btn btn-primary" type="submit">Edit Group</button>
                 <!-- go to requests-->
 
-                <a class="btn btn-primary" href="/GroupRequests/Show/@Model.GroupId">Group Relations</a>
+
             }
+            <a class="btn btn-primary" href="/Groups/ShowRelations/@Model.GroupId">Group Relations</a>
         }
 
         @if (ViewBag.CurrentUser.Item2)
         {
-            using (Html.BeginForm(actionName: "Delete", controllerName: "Groups", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
+            using (Html.BeginForm(actionName: "Delete", controllerName: "Groups", method: FormMethod.Post, routeValues: new { id = Model.GroupId }, htmlAttributes: new { @style = "display: inline" }))
             {
                 @Html.HttpMethodOverride(HttpVerbs.Delete)
                 <button class="btn btn-danger" type="submit">Delete Group</button>
@@ -49,7 +51,7 @@
         {
             if (!@Model.IsPrivate)
             {
-                using (Html.BeginForm(actionName: "New", controllerName: "GroupMembers", method: FormMethod.Post))
+                using (Html.BeginForm(actionName: "New", controllerName: "GroupMembers", method: FormMethod.Post, htmlAttributes: new { @style = "display: inline" }))
                 {
                     @Html.Hidden("GroupId", (int)Model.GroupId)
                     @Html.Hidden("UserId", (string)ViewBag.CurrentUser.Item1)
@@ -58,17 +60,31 @@
             }
             else
             {
-                using (Html.BeginForm(actionName: "New", controllerName: "GroupRequests", method: FormMethod.Post))
+                if (ViewBag.SentRequest)
                 {
-                    @Html.Hidden("GroupId", (int)Model.GroupId)
-                    @Html.Hidden("SenderId", (string)ViewBag.CurrentUser.Item1)
-                    <button type="submit" class="btn btn-primary">Send Request</button>
+                    using (Html.BeginForm(actionName: "Delete", controllerName: "GroupRequests", method: FormMethod.Post, htmlAttributes: new { @style = "display: inline" }))
+                    {
+                        @Html.HttpMethodOverride(HttpVerbs.Delete)
+                        @Html.Hidden("GroupId", (int)Model.GroupId)
+                        @Html.Hidden("SenderId", (string)ViewBag.CurrentUser.Item1)
+                        <button type="submit" class="btn btn-danger">Cancel Request</button>
+                    }
                 }
+                else
+                {
+                    using (Html.BeginForm(actionName: "New", controllerName: "GroupRequests", method: FormMethod.Post, htmlAttributes: new { @style = "display: inline" }))
+                    {
+                        @Html.Hidden("GroupId", (int)Model.GroupId)
+                        @Html.Hidden("SenderId", (string)ViewBag.CurrentUser.Item1)
+                        <button type="submit" class="btn btn-primary">Send Request</button>
+                    }
+                }
+
             }
         }
         else
         {
-            using (Html.BeginForm(actionName: "Delete", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { GroupId = Model.GroupId, UserId = (string)ViewBag.CurrentUser.Item1 }))
+            using (Html.BeginForm(actionName: "Delete", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { GroupId = Model.GroupId, UserId = (string)ViewBag.CurrentUser.Item1 }, htmlAttributes: new { @style = "display: inline" }))
             {
                 @Html.HttpMethodOverride(HttpVerbs.Delete)
                 TempData["ReturnTo"] = "Groups";
@@ -128,13 +144,6 @@
 </div>
 
 
-@if (ViewBag.CurrentUser.Item2)
-{
-
-
-
-}
-
 @if (ViewBag.IsMember || ViewBag.CurrentUser.Item2)
 {
     <div class="card">
@@ -184,9 +193,6 @@
     }
 }
 
-@*@section Scripts{
-        <script src="@Url.Content("~/Content/UsefulFunctions.js")"></script>
-    }*@
 
 
 
