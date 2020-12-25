@@ -32,9 +32,6 @@
             <br />
         }
 
-
-
-
         @if (ViewBag.CurrentUser.Item1 == Model.Id || ViewBag.CurrentUser.Item2)
         {
             <div class="panel-footer">
@@ -44,17 +41,17 @@
         }
 
         <!--
-            Niciuna - Send, Follow, Block
-            Friend - Buton Block si Unfriend
-            Follow - Send Request, Unfollow, Block
-            IsFollowed - Send Request, Follow, Block
-            Blocked - Unblock
-            IsBlocked - You can't view this page
+        Niciuna - Send, Follow, Block
+        Friend - Buton Block si Unfriend
+        Follow - Send Request, Unfollow, Block
+        IsFollowed - Send Request, Follow, Block
+        Blocked - Unblock
+        IsBlocked - You can't view this page
 
-            Daca avem Follow back -> ii facem prieteni <=> send request
-        -->
+        Daca avem Follow back -> ii facem prieteni <=> send request
+    -->
         <!-- Send/Cancel Friend Request -->
-        
+
         @if (ViewBag.CurrentUser.Item1 != null)
         {
             if (Model.SentFriendRequests.Where(fr => fr.RecieverId == ViewBag.CurrentUser.Item1).Count() == 1)
@@ -218,7 +215,7 @@
                 }
             }
         }
-       
+
     </div>
     <div class="col-md-4">
         <img src="~/Content/Images/UserShow.svg" style="width: 80%" />

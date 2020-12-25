@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using OnlyFriends.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -29,6 +30,9 @@ namespace OnlyFriends.Controllers
                 UserRelationsCount[u.Id] = new { NrFollowers = }
             }*/
 
+            IDictionary<string, int> NrFriends = new Dictionary<string, int>();
+            IDictionary<string, int> NrFollowers = new Dictionary<string, int>();
+
             var search = "";
             if (Request.Params.Get("search") != null)
             {
@@ -41,8 +45,19 @@ namespace OnlyFriends.Controllers
                     ).Select(us => us.Id).ToList();
 
                 users = users.Where(user => userIds.Contains(user.Id)).OrderBy(u => u.UserName);
-            }
 
+               
+            }
+            foreach (var u in users)
+            {
+                int nrfriends = db.UserRelations.Where(ur => (ur.User1Id == u.Id && ur.Status == "Friend")).Count();
+                int nrfollowers = db.UserRelations.Where(ur => (ur.User1Id == u.Id && ur.Status == "IsFollowed")).Count();
+
+                NrFriends.Add(u.Id, nrfriends);
+                NrFollowers.Add(u.Id, nrfollowers);
+            }
+            ViewBag.NrFriends = NrFriends;
+            ViewBag.NrFollowers = NrFollowers;
             ViewBag.SearchString = search;
             ViewBag.UsersList = users;
             ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), User.IsInRole("Editor") || User.IsInRole("Admin"));
@@ -52,6 +67,7 @@ namespace OnlyFriends.Controllers
         public ActionResult MyPage()
         {
             ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), User.IsInRole("Editor") || User.IsInRole("Admin"));
             return View(user);
         }
         
@@ -63,6 +79,7 @@ namespace OnlyFriends.Controllers
             ApplicationUser user = db.Users.Find(id);
             string currentRole = user.Roles.FirstOrDefault().RoleId;
             ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), User.IsInRole("Editor") || User.IsInRole("Admin"));
+
             var userRoleName = (from role in db.Roles
                                 where role.Id == currentRole
                                 select role.Name).First();
@@ -137,13 +154,18 @@ namespace OnlyFriends.Controllers
                     user.PhoneNumber = newData.PhoneNumber;
                     user.IsPrivate = newData.IsPrivate;
                     var roles = from role in db.Roles select role;
-                    foreach (var role in roles)
-                    {
-                        UserManager.RemoveFromRole(id, role.Name);
-                    }
                     var selectedRole =
                     db.Roles.Find(HttpContext.Request.Params.Get("newRole"));
-                    UserManager.AddToRole(id, selectedRole.Name);
+                    Console.WriteLine(selectedRole);
+                    if (selectedRole != null)
+                    {
+                        foreach (var role in roles)
+                        {
+                            UserManager.RemoveFromRole(id, role.Name);
+                        }
+                        UserManager.AddToRole(id, selectedRole.Name);
+                    }
+                    
                     db.SaveChanges();
                 }
                 return RedirectToAction("Index");

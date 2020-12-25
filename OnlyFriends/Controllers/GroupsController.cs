@@ -3,6 +3,7 @@ using OnlyFriends.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
@@ -166,9 +167,22 @@ namespace OnlyFriends.Controllers
             Group group = db.Groups.Find(id);
             if (group.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"))
             {
+
+                if (group.UserId != User.Identity.GetUserId() && (User.IsInRole("Editor") || User.IsInRole("Admin")))
+                {
+
+                    string subject = "Your group has been deleted.";
+                    string body = "Hello, " + group.User.UserName + " ! <br /> Unfortunately, your group was deleted by OnlyFriends Admin: " + User.Identity.GetUserName() + "<br /> :(";
+
+                    EmailSender emailsender = new EmailSender();
+                    emailsender.SendEmailNotification(group.User.Email, subject, body);
+                }
                 db.Groups.Remove(group);
                 db.SaveChanges();
                 TempData["message"] = "The group was deleted";
+
+                
+
                 return RedirectToAction("Index");
             }
             else

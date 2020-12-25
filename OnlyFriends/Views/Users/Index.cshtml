@@ -26,35 +26,37 @@
 {
     if (!(ViewBag.CurrentUser.Item1 == null && user.IsPrivate))
     {
-        <div class="card" style="padding: 5px">
-            <div class="panel-heading"><i class="fa fa-user"></i> @user.UserName</div>
-            <div class="panel-body">
-                <i class="fa fa-envelope"></i>  <span class="label label-default">@user.Email</span>
-                <br />
-                <br />
-                @if (@user.PhoneNumber != null)
-                {
-                    <i class="fa fa-phone"></i>@:Telefon utilizator:<span class="label label-default">@user.PhoneNumber</span>
-                }
-                @*@if (user.MyUserRelations.ToList().Contains(ViewBag.CurrentUser.Item1))
-                {
-                    switch (user.MyUserRelations.ToList().Find(ViewBag.CurrentUser.Item1).Status)
-                    {
-                        case "Friend":<strong>Friend</strong> break;
-                        case "Follows": <strong>Follow</strong> break;
-                        case "IsFollowed": <strong>Your Follower</strong> break;
-                        case "Blocked": <strong>Blocked</strong> break;
-                        case "IsBlocked": <strong>Blocked you</strong> break;
-                        default: break;
-                    }
-                }*@
+        <div class="card" style="padding: 10px">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="panel-heading"><i class="fa fa-user"></i><a href="/Users/Show/@user.Id"> @user.UserName</a></div>
+                    <div class="panel-body">
+                        <i class="fa fa-envelope"></i>  <span class="label label-default"> @user.Email</span>
+
+                        @if (@user.PhoneNumber != null)
+                        {
+                            <br />
+                            <i class="fa fa-phone"></i><span class="label label-default">@user.PhoneNumber</span>
+                        }
+                        <br />
+                        @if (ViewBag.NrFriends.ContainsKey(user.Id))
+                        {
+                            <strong>Friends: @ViewBag.NrFriends[user.Id]</strong>
+                        }
+                        @if (ViewBag.NrFollowers.ContainsKey(user.Id))
+                        {
+                            <br />
+                            <strong>Followers: @ViewBag.NrFollowers[user.Id]</strong>
+                        }
+
+                    </div>
                 </div>
-            <div class="panel-footer">
-                <a class="btn btn-sm btn-success" href="/Users/Edit/@user.Id"> Editare utilizator</a>
-                <a class="btn btn-sm btn-success" href="/Users/Show/@user.Id"> Vizualizare utilizator</a>
+                <div class="col-md-4 align-bottom" >
+                    <a class="btn btn-sm btn-success pull-right" style="bottom: 0; right: 15px; position: absolute" href="/Users/Show/@user.Id"> Visit page</a>
+                </div>
             </div>
         </div>
 
 
     }
-                }
+}

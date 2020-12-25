@@ -1,7 +1,7 @@
 ﻿@model OnlyFriends.Models.ApplicationUser
 <div class="card">
-@using (Html.BeginForm(actionName: "Edit", controllerName: "Users", routeValues: new { id = Model.Id }))
-{
+    @using (Html.BeginForm(actionName: "Edit", controllerName: "Users", routeValues: new { id = Model.Id }))
+    {
         @Html.HttpMethodOverride(HttpVerbs.Put)
         <br />
         <div class="form">
@@ -16,7 +16,7 @@
                 <i class="fa fa-envelope"></i>
                 <strong>@Html.Label("Email", "Email utilizator")</strong>
                 <br />
-                @Html.TextBox("Email", Model.Email, new {@class = "form__input"})
+                @Html.TextBox("Email", Model.Email, new { @class = "form__input" })
                 <br />
                 <br />
                 <i class="fa fa-phone"></i>
@@ -27,18 +27,36 @@
                 <strong>@Html.Label("IsPrivate", "Make private:")</strong>
                 @Html.CheckBox("IsPrivate", Model.IsPrivate)
                 <br />
-                @Html.Hidden("newRole", (string)ViewBag.userRole)
+
+
+                if (ViewBag.CurrentUser.Item2)
+                {
+
+                    <i class="glyphicon glyphicon-th-list"></i>
+                    <strong>@Html.Label("newRole", "Selectati rolul")</strong>
+                    @Html.DropDownList("newRole", new SelectList(Model.AllRoles, "Value", "Text", ViewBag.userRole), null, new { @class = "form__input" })
+                    <br />
+                    <br />
+                }
+                else
+                {
+                    @Html.Hidden("newRole", (string)ViewBag.userRole)
+                }
             }
 
-            @if (ViewBag.CurrentUser.Item2)
+            else if (ViewBag.CurrentUser.Item2)
             {
+
                 @Html.HiddenFor(m => m.UserName)
                 @Html.HiddenFor(m => m.Email)
                 @Html.HiddenFor(m => m.PhoneNumber)
                 @Html.HiddenFor(m => m.IsPrivate)
+
+
                 <i class="glyphicon glyphicon-th-list"></i>
                 <strong>@Html.Label("newRole", "Selectati rolul")</strong>
                 @Html.DropDownList("newRole", new SelectList(Model.AllRoles, "Value", "Text", ViewBag.userRole), null, new { @class = "form__input" })
+                <br />
                 <br />
 
             }
@@ -47,27 +65,4 @@
         </div>
     }
 </div>
-@*        <div class="card">
-            @using (Html.BeginForm(actionName: "Edit", controllerName: "Groups"))
-            {
-                @Html.HttpMethodOverride(HttpVerbs.Put)
 
-                <div class="form">
-                    <strong> @Html.Label("Title", "Post title")</strong>
-                    <br />
-                    @Html.TextBox("Title", Model.Title, new { @class = "form__input" })
-                    @Html.ValidationMessage("Title", null, new { @class = "text-danger" })
-                    <br />
-                    <br />
-                    <strong>@Html.Label("Content", "Post's Content:")</strong>
-                    <br />
-                    @Html.TextArea("Content", Model.Content, new { @class = "form__input" })
-                    @Html.ValidationMessage("Description", null, new { @class = "text-danger" })
-                    <br />
-                    @Html.HiddenFor(m => m.Date)
-
-
-                    <button class="btn btn-sm btn-success" type="submit">Edit Post</button>
-                </div>
-            }
-        </div>*@
