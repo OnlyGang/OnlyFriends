@@ -19,7 +19,7 @@ namespace OnlyFriends.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult New(FriendRequest friendrequest)
         {
             friendrequest.Date = DateTime.Now;
@@ -46,7 +46,7 @@ namespace OnlyFriends.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Accept(string SenderId, string RecieverId)
         {
             FriendRequest ToDelete = db.FriendRequests.Find(SenderId, RecieverId);
@@ -71,7 +71,7 @@ namespace OnlyFriends.Controllers
         }
         
 
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         [HttpDelete]
         public ActionResult Delete(string SenderId, string RecieverId)
         {
@@ -85,7 +85,7 @@ namespace OnlyFriends.Controllers
         /*public ActionResult Show(string id)
         {
             var user = db.Users.Find(id);
-            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), user.Id == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
+            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), user.Id == User.Identity.GetUserId() || User.IsInRole("Admin"));
             return View(user);
         }*/
     }

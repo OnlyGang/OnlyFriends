@@ -60,17 +60,17 @@ namespace OnlyFriends.Controllers
             ViewBag.NrFollowers = NrFollowers;
             ViewBag.SearchString = search;
             ViewBag.UsersList = users;
-            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), User.IsInRole("Editor") || User.IsInRole("Admin"));
+            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), User.IsInRole("Admin"));
             return View();
         }
-
+        [Authorize(Roles = "User,Admin")]
         public ActionResult MyPage()
         {
             ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
-            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), User.IsInRole("Editor") || User.IsInRole("Admin"));
+            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), User.IsInRole("Admin"));
             return View(user);
         }
-        
+
         public ActionResult Show(string id)
         {
             // System.Diagnostics.Debug.WriteLine((id == null ? "null" : id));
@@ -78,7 +78,7 @@ namespace OnlyFriends.Controllers
                 return RedirectToAction("MyPage");
             ApplicationUser user = db.Users.Find(id);
             string currentRole = user.Roles.FirstOrDefault().RoleId;
-            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), User.IsInRole("Editor") || User.IsInRole("Admin"));
+            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), User.IsInRole("Admin"));
 
             var userRoleName = (from role in db.Roles
                                 where role.Id == currentRole
@@ -90,13 +90,13 @@ namespace OnlyFriends.Controllers
             ViewBag.IsFriendRequestSent = (db.FriendRequests.Find(User.Identity.GetUserId(), id) != null);
             return View(user);
         }
-
+        [Authorize(Roles = "User,Admin")]
         public ActionResult ShowRelations (string id)
         {
             if(id == User.Identity.GetUserId())
             {
                 var user = db.Users.Find(id);
-                ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), user.Id == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
+                ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), user.Id == User.Identity.GetUserId() || User.IsInRole("Admin"));
                 return View(user);
             }
             else
@@ -106,7 +106,7 @@ namespace OnlyFriends.Controllers
             }
             
         }
-
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Edit(string id)
         {
             
@@ -137,18 +137,19 @@ namespace OnlyFriends.Controllers
         [HttpPut]
         public ActionResult Edit(string id, ApplicationUser newData)
         {
-            ApplicationUser user = db.Users.Find(id);
+            /*ApplicationUser user = db.Users.Find(id);
             user.AllRoles = GetAllRoles();
             var userRole = user.Roles.FirstOrDefault();
-            ViewBag.userRole = userRole.RoleId;
+            ViewBag.userRole = userRole.RoleId;*/
             try
             {
                 ApplicationDbContext context = new ApplicationDbContext();
                 var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
                 var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
-
+                var user = UserManager.FindById(id);
                 if (TryUpdateModel(user))
                 {
+                    
                     user.UserName = newData.UserName;
                     user.Email = newData.Email;
                     user.PhoneNumber = newData.PhoneNumber;
@@ -165,10 +166,11 @@ namespace OnlyFriends.Controllers
                         }
                         UserManager.AddToRole(id, selectedRole.Name);
                     }
-                    
+                    var updateResult = UserManager.UpdateAsync(user);
+                  //  SignInAsync(user, true);//user is cached until logout so do this to clear cache
                     db.SaveChanges();
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Show/"+id);
             }
             catch (Exception e)
             {

@@ -13,13 +13,13 @@ namespace OnlyFriends.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Comments
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Index()
         {
             return View();
         }
 
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         [HttpDelete]
         public ActionResult Delete(int id)
         {
@@ -30,7 +30,7 @@ namespace OnlyFriends.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult New(Comment comm)
         {
             comm.Date = DateTime.Now;
@@ -48,11 +48,11 @@ namespace OnlyFriends.Controllers
             }
 
         }
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Edit(int id)
         {
             Comment comm = db.Comments.Find(id);
-            if (comm.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"))
+            if (comm.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
             {
                 return View(comm);
             }
@@ -64,7 +64,7 @@ namespace OnlyFriends.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Edit(int id, Comment requestComment)
         {
             try
@@ -72,7 +72,7 @@ namespace OnlyFriends.Controllers
                 if (ModelState.IsValid)
                 {
                     Comment comm = db.Comments.Find(id);
-                    if (comm.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"))
+                    if (comm.UserId == User.Identity.GetUserId() ||  User.IsInRole("Admin"))
                     {
                         if (TryUpdateModel(comm))
                         {

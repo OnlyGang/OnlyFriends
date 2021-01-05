@@ -22,13 +22,13 @@ namespace OnlyFriends.Controllers
         public ActionResult Show(int GroupId)
         {
             var group = db.Groups.Find(GroupId);
-            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), group.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
+            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), group.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"));
 
             return View(group);
         }
 
         [HttpPost]
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult New(GroupMember groupmember)
         {
             try
@@ -52,7 +52,7 @@ namespace OnlyFriends.Controllers
 
         }
 
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         [HttpDelete]
         public ActionResult Delete(int GroupId, string UserId)
         {
@@ -60,7 +60,7 @@ namespace OnlyFriends.Controllers
             db.GroupMembers.Remove(ToDelete);
             db.SaveChanges();
             string controller = (string)TempData["ReturnTo"];
-            return Redirect($"/{controller}/Show/" + GroupId);
+            return Redirect($"/{controller}/ShowRelations/" + GroupId);
         }
     }
 

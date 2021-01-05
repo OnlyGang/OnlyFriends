@@ -17,7 +17,7 @@ namespace OnlyFriends.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult New(UserRelation userrelation)
         {
             userrelation.Date = DateTime.Now;
@@ -63,7 +63,7 @@ namespace OnlyFriends.Controllers
 
         }
 
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         [HttpPut]
         public ActionResult Edit(UserRelation request)
         {
@@ -124,7 +124,7 @@ namespace OnlyFriends.Controllers
 
         }
 
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         [HttpDelete]
         public ActionResult Delete(string User1Id, string User2Id)
         {

@@ -2,6 +2,11 @@
 
 <p class="lead">
     <a href="/Users/Show/@Model.User.Id"><i class="fa fa-user"></i>  by @Model.User.UserName</a>
+    @if (Model.GroupId != null)
+    {
+        <a href="/Groups/Show/@Model.GroupId"> in @Model.Group.Title</a>
+    }
+
     <span class="label label-success show-date pull-right">@Model.Date.ToString("dd/MM/yyyy HH:mm:ss")</span>
 </p>
 <p class="lead">

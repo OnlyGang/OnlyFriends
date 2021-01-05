@@ -25,13 +25,13 @@ namespace OnlyFriends.Controllers
             var grouprequests = group.GroupRequests;
             ViewBag.Group = group;
             ViewBag.GroupRequests = grouprequests;
-            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), group.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
+            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), group.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"));
             return View(group);
         }
 */
 
         [HttpPost]
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult New(GroupRequest grouprequest)
         {
             try
@@ -55,14 +55,16 @@ namespace OnlyFriends.Controllers
 
         }
 
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         [HttpDelete]
         public ActionResult Delete(string SenderId, int GroupId)
         {
             GroupRequest ToDelete = db.GroupRequests.Find(SenderId, GroupId);
             db.GroupRequests.Remove(ToDelete);
             db.SaveChanges();
-            return RedirectToAction("Show", "Groups", new { id = GroupId });
+            if(SenderId == User.Identity.GetUserId())
+                return RedirectToAction("Show", "Groups", new { id = GroupId });
+            return RedirectToAction("ShowRelations", "Groups", new { id = GroupId });
         }
         [HttpDelete]
         public ActionResult Accept(string SenderId, int GroupId)
@@ -77,7 +79,7 @@ namespace OnlyFriends.Controllers
             var GMC = new GroupMembersController();
             GMC.New(ToAdd);
 
-            return RedirectToAction("Show", "Groups", new { id = GroupId });
+            return RedirectToAction("ShowRelations", "Groups", new { id = GroupId });
         }
     }
 }

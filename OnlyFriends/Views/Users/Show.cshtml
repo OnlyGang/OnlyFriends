@@ -34,10 +34,7 @@
 
         @if (ViewBag.CurrentUser.Item1 == Model.Id || ViewBag.CurrentUser.Item2)
         {
-            <div class="panel-footer">
-                <a class="btn btn-sm btn-success" href="/Users/Edit/@Model.Id">Edit</a>
-            </div>
-            <br />
+                <a class="btn btn-success" style="display:inline; padding: 9px" href="/Users/Edit/@Model.Id">Edit</a>
         }
 
         <!--
@@ -224,7 +221,7 @@
 </div>
 <!-- Showing users friends -->
 
-@if ((!Model.IsPrivate && (ViewBag.Relation == null || (ViewBag.Relation != null && ViewBag.Relation.Status != "Blocked" && ViewBag.Relation.Status != "IsBlocked"))) || (ViewBag.Relation != null && ViewBag.Relation.Status == "Friend"))
+@if ((!Model.IsPrivate && (ViewBag.Relation == null || (ViewBag.Relation != null && ViewBag.Relation.Status != "Blocked" && ViewBag.Relation.Status != "IsBlocked"))) || (ViewBag.Relation != null && ViewBag.Relation.Status == "Friend") || ViewBag.CurrentUser.Item2)
 {
 
     <div class="card">

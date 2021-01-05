@@ -17,7 +17,7 @@
                     <strong class="col-md-10">@Html.ActionLink(mem.User.UserName, "Show", "Users", new { id = mem.UserId }, null) </strong>
 
                     <div class="col-md-2">
-                        @using (Html.BeginForm(actionName: "Delete", controllerName: "GroupRelations", method: FormMethod.Post, routeValues: new { UserId = mem.UserId, GroupId = mem.GroupId }))
+                        @using (Html.BeginForm(actionName: "Delete", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { UserId = mem.UserId, GroupId = mem.GroupId }))
                         {
                             @Html.HttpMethodOverride(HttpVerbs.Delete)
 
@@ -44,14 +44,14 @@
                         <strong class="col-md-8">@Html.ActionLink(gr.User.UserName, "Show", "Users", new { id = gr.SenderId }, null) @*<span class="show-date">@gr.Date.ToString("dd/MM/yyyy HH:mm:ss")</span>*@</strong>
                         <div class="col-md-4 pull-right">
                             <div>
-                                @using (Html.BeginForm(actionName: "Delete", controllerName: "GroupRequests", method: FormMethod.Post, routeValues: new { SenderId = gr.User, GroupId = gr.GroupId }))
+                                @using (Html.BeginForm(actionName: "Delete", controllerName: "GroupRequests", method: FormMethod.Post, routeValues: new { SenderId = gr.SenderId, GroupId = gr.GroupId }))
                                 {
                                     @Html.HttpMethodOverride(HttpVerbs.Delete)
                                     <button class="fa fa-trash pull-right" style="border: none; background: transparent; " type="submit"></button>
                                 }
                             </div>
                             <div>
-                                @using (Html.BeginForm(actionName: "Accept", controllerName: "GroupRequests", method: FormMethod.Post, routeValues: new { SenderId = gr.User, GroupId = gr.GroupId }))
+                                @using (Html.BeginForm(actionName: "Accept", controllerName: "GroupRequests", method: FormMethod.Post, routeValues: new { SenderId = gr.SenderId, GroupId = gr.GroupId }))
                                 {
                                     @Html.HttpMethodOverride(HttpVerbs.Delete)
                                     <button class="fa fa-check pull-right" style="border: none; background: transparent;" type="submit"></button>

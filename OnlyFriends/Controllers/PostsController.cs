@@ -15,7 +15,7 @@ namespace OnlyFriends.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Post
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Index()
         {
             string CurrUserId = User.Identity.GetUserId();
@@ -51,18 +51,18 @@ namespace OnlyFriends.Controllers
             return View();
         }
 
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Show(int id)
         {
             Post post = db.Posts.Find(id);
-            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), post.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"));
+            ViewBag.CurrentUser = new Tuple<string, bool>(User.Identity.GetUserId(), post.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"));
             ViewBag.IsLikedByCurrentUser = db.PostLikes.Find(id, User.Identity.GetUserId()) != null;
            
             return View(post);
 
         }
 
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult New()
         {
             Post post = new Post();
@@ -74,7 +74,7 @@ namespace OnlyFriends.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult New(Post post)
         {
             post.UserId = User.Identity.GetUserId();
@@ -105,12 +105,12 @@ namespace OnlyFriends.Controllers
             }
         }
 
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Edit(int id)
         {
             
             Post post = db.Posts.Find(id);
-            if (post.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"))
+            if (post.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
             {
                 return View(post);
             }
@@ -122,7 +122,7 @@ namespace OnlyFriends.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Edit(int id, Post requestPost)
         {
             try
@@ -130,7 +130,7 @@ namespace OnlyFriends.Controllers
                 if (ModelState.IsValid)
                 {
                     Post post = db.Posts.Find(id);
-                    if (post.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"))
+                    if (post.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
                     {
                         if (TryUpdateModel(post))
                         {
@@ -162,12 +162,21 @@ namespace OnlyFriends.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Delete(int id)
         {
             Post post = db.Posts.Find(id);
-            if(post.UserId == User.Identity.GetUserId() || User.IsInRole("Editor") || User.IsInRole("Admin"))
+            if(post.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
             {
+                if (post.UserId != User.Identity.GetUserId() && (User.IsInRole("Admin")))
+                {
+
+                    string subject = "Your post has been deleted.";
+                    string body = "Hello, " + post.User.UserName + " ! <br /> Unfortunately, your post "+post.Title+" was deleted by OnlyFriends Admin: " + User.Identity.GetUserName() + "<br /> :(";
+
+                    EmailSender emailsender = new EmailSender();
+                    emailsender.SendEmailNotification(post.User.Email, subject, body);
+                }
                 db.Posts.Remove(post);
                 db.SaveChanges();
                 TempData["message"] = "The post was deleted";

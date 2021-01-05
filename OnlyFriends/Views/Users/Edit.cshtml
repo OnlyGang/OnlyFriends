@@ -1,4 +1,9 @@
 ﻿@model OnlyFriends.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "Edit profile";
+}
+
 <div class="card">
     @using (Html.BeginForm(actionName: "Edit", controllerName: "Users", routeValues: new { id = Model.Id }))
     {

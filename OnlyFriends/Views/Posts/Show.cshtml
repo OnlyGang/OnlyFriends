@@ -18,11 +18,23 @@ else if (TempData["message"] == "You don't have enough permissions to modify thi
 }
 
 <br />
-@if (Model.GroupId != null)
-{
-    @Html.ActionLink("Back to Group", "Show", "Groups", new { id = Model.GroupId }, new { @class = "btn btn-info block" });
-}
-@Html.ActionLink("Back to posts", "Index", new { controller = "Posts" }, new { @class = "btn btn-warning block" })
+<div class="row">
+    <div class="col-md-4">
+        @if (Model.GroupId != null)
+        {
+
+            @Html.ActionLink("Back to Group", "Show", "Groups", new { id = Model.GroupId }, new { @class = "btn btn-info btn-block" })
+        }
+    </div>
+    <div class="col-md-4">
+        @Html.ActionLink("Go to posts", "Index", new { controller = "Posts" }, new { @class = "btn btn-warning btn-block" })
+    </div>
+    <div class="col-md-4">
+        @Html.ActionLink("Go to " + Model.User.UserName + "'s page ", "Show", "Users", new { id = Model.UserId }, new { @class = "btn btn-info btn-block" })
+    </div>
+
+</div>
+
 <br />
 
 
@@ -30,7 +42,7 @@ else if (TempData["message"] == "You don't have enough permissions to modify thi
     <div class="card-body">
         @Html.Partial("PostInfo", Model)
     </div>
-    
+
     <div class="row">
         <div class="col-md-4" style="text-align:center">
             <!--Like section-->
@@ -41,10 +53,10 @@ else if (TempData["message"] == "You don't have enough permissions to modify thi
                     @Html.Hidden("PostId", Model.PostId)
                     @Html.Hidden("UserId", (string)ViewBag.CurrentUser.Item1)
                     <button type="submit" class="btn btn-outline-primary">
-                        <i class="fa fa-thumbs-up"></i> Like  
-                         @Html.Partial("LikedBy")
+                        <i class="fa fa-thumbs-up"></i> Like
+                        @Html.Partial("LikedBy")
                     </button>
-                    
+
                 }
             }
             else
@@ -53,19 +65,22 @@ else if (TempData["message"] == "You don't have enough permissions to modify thi
                 {
                     @Html.HttpMethodOverride(HttpVerbs.Delete)
                     <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-thumbs-up"></i>  Like  
-                        @Html.Partial("LikedBy") 
+                        <i class="fa fa-thumbs-up"></i>  Like
+                        @Html.Partial("LikedBy")
                     </button>
                 }
             }
-            
+
         </div>
         @if (ViewBag.CurrentUser.Item2)
         {
+            if (ViewBag.CurrentUser.Item1 == Model.UserId)
+            {
+                <div class="col-md-4" style="text-align:center">
+                    <a href="/Posts/Edit/@Model.PostId" class="btn btn-outline-dark"><i class="fa fa-pencil"></i>  Edit post</a>
+                </div>
+            }
 
-            <div class="col-md-4" style="text-align:center">
-                <a href="/Posts/Edit/@Model.PostId" class="btn btn-outline-dark"><i class="fa fa-pencil"></i>  Edit post</a>
-            </div>
             <div class="col-md-4" style="text-align:center">
                 @using (Html.BeginForm(actionName: "Delete", controllerName: "Posts", method: FormMethod.Post, routeValues: new { id = Model.PostId }))
                 {
@@ -89,7 +104,7 @@ else if (TempData["message"] == "You don't have enough permissions to modify thi
 <br />
 
 <div class="row">
-
+    <div class="col-md-2"></div>
     <div class="col-md-8">
 
         @using (Html.BeginForm(actionName: "New", controllerName: "Comments"))
@@ -116,8 +131,6 @@ else if (TempData["message"] == "You don't have enough permissions to modify thi
         <br />
     </div>
     <div class="col-md-2"></div>
-    <div class="col-md-2">
-    </div>
 </div>
 
 @foreach (var comm in Model.Comments)

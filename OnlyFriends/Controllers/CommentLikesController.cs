@@ -18,7 +18,7 @@ namespace OnlyFriends.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult New(CommentLike commlike)
         {
             try
@@ -35,7 +35,7 @@ namespace OnlyFriends.Controllers
 
         }
 
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         [HttpDelete]
         public ActionResult Delete(int CommentId, string UserId)
         {
